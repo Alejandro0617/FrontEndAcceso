@@ -1,0 +1,382 @@
+@page "/red"
+<!--
+Define la URL relativa que carga este componente. En este caso, cuando un usuario navega a "/red",
+este componente Blazor se carga y se representa en la página.
+-->
+@using BlazorFrontEnd.Services
+@inject ApiService ApiService
+@inject IJSRuntime JSRuntime
+@inherits ValidacionAcceso
+
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Redes</b></h2>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nueva Red</span>
+                        </a>
+ 
+                        <a href="#consultarModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar Red</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @if (listado == null)
+            {
+                <p>Cargando...</p>
+            }
+            else if (!listado.Any())
+            {
+                <p>No hay redes registradas.</p>
+            }
+            else
+            {
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <!-- CAMBIAR EN CADA TABLA -->
+                            <th>Idr</th>
+                            <th>Nombre</th>
+                            <th>URL</th>
+                            <th>País</th>
+                            <!-- FIN -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sele in listado)
+                        {
+                            <tr>
+                                <!-- CAMBIAR EN CADA TABLA -->
+                                <td>@sele["idr"]</td>
+                                <td>@sele["nombre"]</td>
+                                <td>@sele["url"]</td>
+                                <td>@sele["pais"]</td>
+                                <!-- FIN -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@currentSele" OnValidSubmit="SaveSele">
+                <DataAnnotationsValidator />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">@(isNewSele ? "Añadir" : "Editar") Red</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- CAMBIAR EN CADA TABLA -->
+                    <div class="form-group">
+                        <label>Idr</label>
+                        <InputNumber class="form-control" @bind-Value="idr" />
+                        <ValidationMessage For="@(() => idr)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <InputText class="form-control" @bind-Value="nombre" />
+                        <ValidationMessage For="@(() => nombre)" />
+                    </div>
+                    <div class="form-group">
+                        <label>URL</label>
+                        <InputText class="form-control" @bind-Value="url" />
+                        <ValidationMessage For="@(() => url)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Pais</label>
+                        <InputText class="form-control" @bind-Value="pais" />
+                        <ValidationMessage For="@(() => pais)" />
+                    </div>
+                    <!-- FIN -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNewSele ? "Añadir" : "Guardar")</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Red</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar esta red?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteSele">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="consultarModal" tabindex="-1" role="dialog" aria-labelledby="consultarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarModalLabel">Consultar Red</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- CAMBIAR EN CADA TABLA -->
+                <div class="form-group">
+                    <label>Idr</label>
+                    <input type="text" class="form-control" @bind="consultaIdr" @bind:event="oninput" />
+                </div>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" class="form-control" @bind="consultaNombre" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Url</label>
+                    <input type="text" class="form-control" @bind="consultaUrl" readonly />
+                </div>
+                <div class="form-group">
+                    <label>País</label>
+                    <input type="text" class="form-control" @bind="consultaPais" readonly />
+                </div>
+                <!-- FIN -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarSele">Consultar</button>
+                <button type="button" class="btn btn-warning" @onclick="ModificarSeleConsultada" disabled="@(!seleEncontrada)">Modificar</button>
+                <button type="button" class="btn btn-danger" @onclick="EliminarSeleConsultada" disabled="@(!seleEncontrada)">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+   
+    private List<Dictionary<string, object>> listado = new List<Dictionary<string, object>>();
+    private Dictionary<string, object> currentSele = new Dictionary<string, object>();
+    private bool isNewSele = true;
+    private bool seleEncontrada = false;
+
+    <!-- CAMBIAR EN CADA TABLA -->
+    private int idr;
+    private string nombre = "";
+    private string url = "";
+    private string pais = "";
+
+    private string consultaIdr = "";
+    private string consultaNombre = "";
+    private string consultaUrl = "";
+    private string consultaPais = "";
+    <!-- FIN -->
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadListados();
+    }
+ 
+    private async Task LoadListados()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            listado = await ApiService.GetDataAsync("api/proyecto/red");
+            <!-- FIN -->
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("console.log", $"Error al cargar redes: {ex.Message}");
+            Console.WriteLine($"Error al cargar redes: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al cargar redes: "+ex.Message);
+        }
+    }
+ 
+    private void PrepareForAddOrEdit(Dictionary<string, object>? sele = null)
+    {
+        isNewSele = sele == null;
+        currentSele = sele ?? new Dictionary<string, object>();
+
+        <!-- CAMBIAR EN CADA TABLA -->
+        idr = currentSele.TryGetValue("idr", out var i) ? Convert.ToInt32(i) : 0;
+        nombre = currentSele.TryGetValue("nombre", out var n) ? n?.ToString() ?? "" : "";
+        url = currentSele.TryGetValue("url", out var u) ? u?.ToString() ?? "" : "";
+        pais = currentSele.TryGetValue("pais", out var p) ? p?.ToString() ?? "" : "";
+        <!-- FIN -->
+       
+        JSRuntime.InvokeVoidAsync("showModal", "editModal");
+    }
+ 
+    private void PrepareForConsulta()
+    {
+        <!-- CAMBIAR EN CADA TABLA -->
+        consultaIdr = "";
+        consultaNombre = "";
+        consultaUrl = "";
+        consultaPais = "";
+        <!-- FIN -->
+        seleEncontrada = false;
+    }
+ 
+    private void SetSeleToDelete(Dictionary<string, object> sele)
+    {
+        currentSele = sele;
+    }
+ 
+    private async Task SaveSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            currentSele["idr"] = idr;
+            currentSele["nombre"] = nombre;
+            currentSele["url"] = url;
+            currentSele["pais"] = pais;
+            <!-- FIN -->
+ 
+            bool success;
+            if (isNewSele)
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.AddEntityAsync("api/proyecto/red", currentSele);
+                <!-- FIN -->
+            }
+            else
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.EditEntityAsync("api/proyecto/red/idr", idr, currentSele);
+                <!-- FIN -->
+            }
+ 
+            if (success)
+            {
+                await JSRuntime.InvokeVoidAsync("hideModal", "addModal");
+ 
+                await LoadListados();
+                <!-- CAMBIAR EN CADA TABLA -->
+                idr = 0;
+                nombre = string.Empty;
+                url = string.Empty;
+                pais = string.Empty;
+                <!-- FIN -->
+
+                currentSele = new Dictionary<string, object>();
+                isNewSele = true;
+ 
+                StateHasChanged();
+ 
+                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito.");
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error al guardar la red. Por favor, intente nuevamente.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar red: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al guardar la red. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task DeleteSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            if (currentSele.TryGetValue("idr", out var prmObj) && prmObj is string prmStr && int.TryParse(prmStr, out int prmInt))
+            {
+                bool success = await ApiService.DeleteEntityAsync("api/proyecto/red/idr", prmInt);
+                if (success)
+                {
+                    await JSRuntime.InvokeVoidAsync("hideModal", "deleteModal");
+                    await LoadListados();
+                    await JSRuntime.InvokeVoidAsync("alert", "Red eliminada con éxito.");
+                }
+                else
+                {
+                    await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar la red. Por favor, intente nuevamente.");
+                }
+            }
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar red: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar la red. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task ConsultarSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            var resultado = await ApiService.GetDataAsync($"api/proyecto/red/idr/{consultaIdr}");
+            if (resultado.Any())
+            {
+                var seleConsultada = resultado.First();
+                consultaNombre = seleConsultada["nombre"]?.ToString() ?? "";
+                consultaUrl = seleConsultada["url"]?.ToString() ?? "";
+                consultaPais = seleConsultada["pais"]?.ToString() ?? "";
+                seleEncontrada = true;
+            }
+            else
+            {
+                consultaNombre = "";
+                consultaUrl = "";
+                consultaPais = "";
+                seleEncontrada = false;
+                await JSRuntime.InvokeVoidAsync("alert", "No se encontró ninguna red con ese ID.");
+            }
+            StateHasChanged();
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al consultar red: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar la red. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task ModificarSeleConsultada()
+    {
+        <!-- CAMBIAR EN CADA TABLA -->
+        PrepareForAddOrEdit(new Dictionary<string, object>
+        {
+            ["idr"] = consultaIdr,
+            ["nombre"] = consultaNombre,
+            ["url"] = consultaUrl,
+            ["pais"] = consultaPais
+        });
+        <!-- FIN -->
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("showModal", "addModal");
+    }
+
+    private async Task EliminarSeleConsultada()
+    {
+        SetSeleToDelete(new Dictionary<string, object>
+        {
+            ["idr"] = consultaIdr,
+            ["nombre"] = consultaNombre,
+            ["url"] = consultaUrl,
+            ["pais"] = consultaPais
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("showModal", "deleteModal");
+    }
+}

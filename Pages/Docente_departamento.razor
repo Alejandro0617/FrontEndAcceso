@@ -1,0 +1,424 @@
+@page "/docente_departamento"
+<!--
+Define la URL relativa que carga este componente. En este caso, cuando un usuario navega a "/docente_departamento",
+este componente Blazor se carga y se representa en la página.
+-->
+@using BlazorFrontEnd.Services
+@inject ApiService ApiService
+@inject IJSRuntime JSRuntime
+@inherits ValidacionAcceso
+
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Docente Departamento</b></h2>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nuevo Docente Dep.</span>
+                        </a>
+ 
+                        <a href="#consultarModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar Docente Dep.</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @if (listado == null)
+            {
+                <p>Cargando...</p>
+            }
+            else if (!listado.Any())
+            {
+                <p>No hay departamentos docentes registrados.</p>
+            }
+            else
+            {
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <!-- CAMBIAR EN CADA TABLA -->
+                            <th>Docente</th>
+                            <th>Departamento</th>
+                            <th>Dedicación</th>
+                            <th>Modalidad</th>
+                            <th>Fecha Ingreso</th>
+                            <th>Fecha Sálida</th>
+                            <!-- FIN -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sele in listado)
+                        {
+                            <tr>
+                                <!-- CAMBIAR EN CADA TABLA -->
+                                <td>@sele["docente"]</td>
+                                <td>@sele["departamento"]</td>
+                                <td>@sele["dedicacion"]</td>
+                                <td>@sele["modalidad"]</td>
+                                <td>@sele["fecha_ingreso"]</td>
+                                <td>@sele["fecha_salida"]</td>
+                                <!-- FIN -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@currentSele" OnValidSubmit="SaveSele">
+                <DataAnnotationsValidator />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">@(isNewSele ? "Añadir" : "Editar") Docente Dep.</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- CAMBIAR EN CADA TABLA -->
+                    <div class="form-group">
+                        <label>Docente</label>
+                        <InputNumber class="form-control" @bind-Value="docente" />
+                        <ValidationMessage For="@(() => docente)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <InputNumber class="form-control" @bind-Value="departamento" />
+                        <ValidationMessage For="@(() => departamento)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Dedicación</label>
+                        <InputText class="form-control" @bind-Value="dedicacion" />
+                        <ValidationMessage For="@(() => dedicacion)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Modalidad</label>
+                        <InputText class="form-control" @bind-Value="modalidad" />
+                        <ValidationMessage For="@(() => modalidad)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Ingreso</label>
+                        <InputDate class="form-control" @bind-Value="fecha_ingreso" />
+                        <ValidationMessage For="@(() => fecha_ingreso)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Sálida</label>
+                        <InputDate class="form-control" @bind-Value="fecha_salida" />
+                        <ValidationMessage For="@(() => fecha_salida)" />
+                    </div>
+                    <!-- FIN -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNewSele ? "Añadir" : "Guardar")</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Docente Dep.</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar este Docente Dep.?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteSele">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="consultarModal" tabindex="-1" role="dialog" aria-labelledby="consultarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarModalLabel">Consultar Docente Dep.</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- CAMBIAR EN CADA TABLA -->
+                <div class="form-group">
+                    <label>Docente</label>
+                    <input type="text" class="form-control" @bind="consulta1" @bind:event="oninput" />
+                </div>
+                <div class="form-group">
+                    <label>Departamento</label>
+                    <input type="text" class="form-control" @bind="consulta2" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Dedicación</label>
+                    <input type="text" class="form-control" @bind="consulta3" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Modalidad</label>
+                    <input type="text" class="form-control" @bind="consulta4" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Fecha Ingreso</label>
+                    <input type="text" class="form-control" @bind="consulta5" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Fecha Sálida</label>
+                    <input type="text" class="form-control" @bind="consulta6" readonly />
+                </div>
+                <!-- FIN -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarSele">Consultar</button>
+                <button type="button" class="btn btn-warning" @onclick="ModificarSeleConsultada" disabled="@(!seleEncontrada)">Modificar</button>
+                <button type="button" class="btn btn-danger" @onclick="EliminarSeleConsultada" disabled="@(!seleEncontrada)">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+   
+    private List<Dictionary<string, object>> listado = new List<Dictionary<string, object>>();
+    private Dictionary<string, object> currentSele = new Dictionary<string, object>();
+    private bool isNewSele = true;
+    private bool seleEncontrada = false;
+
+    <!-- CAMBIAR EN CADA TABLA -->
+    private int docente;
+    private int departamento;
+    private string dedicacion = "";
+    private string modalidad = "";
+    private DateTime? fecha_ingreso;
+    private DateTime? fecha_salida;
+
+    private string consulta1 = "";
+    private string consulta2 = "";
+    private string consulta3 = "";
+    private string consulta4 = "";
+    private string consulta5 = "";
+    private string consulta6 = "";
+    <!-- FIN -->
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadListados();
+    }
+ 
+    private async Task LoadListados()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            listado = await ApiService.GetDataAsync("api/proyecto/docente_departamento");
+            <!-- FIN -->
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("console.log", $"Error al cargar docente dep.: {ex.Message}");
+            Console.WriteLine($"Error al cargar docente dep.: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al cargar docente dep.: "+ex.Message);
+        }
+    }
+ 
+    private void PrepareForAddOrEdit(Dictionary<string, object>? sele = null)
+    {
+        isNewSele = sele == null;
+        currentSele = sele ?? new Dictionary<string, object>();
+
+        <!-- CAMBIAR EN CADA TABLA -->
+        docente = currentSele.TryGetValue("docente", out var a) ? Convert.ToInt32(a) : 0;
+        departamento = currentSele.TryGetValue("departamento", out var b) ? Convert.ToInt32(b) : 0;
+        dedicacion = currentSele.TryGetValue("dedicacion", out var n) ? n?.ToString() ?? "" : "";
+        modalidad = currentSele.TryGetValue("modalidad", out var o) ? o?.ToString() ?? "" : "";
+        fecha_ingreso = currentSele.TryGetValue("fecha_ingreso", out var p) ? Convert.ToDateTime(p) : default(DateTime);
+        fecha_salida = currentSele.TryGetValue("fecha_salida", out var l) && l != null ? Convert.ToDateTime(l) : (DateTime?)null;
+        <!-- FIN -->
+       
+        JSRuntime.InvokeVoidAsync("showModal", "editModal");
+    }
+ 
+    private void PrepareForConsulta()
+    {
+        <!-- CAMBIAR EN CADA TABLA -->
+        consulta1 = "";
+        consulta2 = "";
+        consulta3 = "";
+        consulta4 = "";
+        consulta5 = "";
+        consulta6 = "";
+        <!-- FIN -->
+        seleEncontrada = false;
+    }
+ 
+    private void SetSeleToDelete(Dictionary<string, object> sele)
+    {
+        currentSele = sele;
+    }
+ 
+    private async Task SaveSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            currentSele["docente"] = docente;
+            currentSele["departamento"] = departamento;
+            currentSele["dedicacion"] = dedicacion;
+            currentSele["modalidad"] = modalidad;
+            currentSele["fecha_ingreso"] = fecha_ingreso;
+            currentSele["fecha_salida"] = fecha_salida.HasValue ? fecha_salida.Value : null;
+            <!-- FIN -->
+ 
+            bool success;
+            if (isNewSele)
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.AddEntityAsync("api/proyecto/docente_departamento", currentSele);
+                <!-- FIN -->
+            }
+            else
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.EditEntityAsync("api/proyecto/docente_departamento/docente", docente, currentSele);
+                <!-- FIN -->
+            }
+ 
+            if (success)
+            {
+                await JSRuntime.InvokeVoidAsync("hideModal", "addModal");
+ 
+                await LoadListados();
+                <!-- CAMBIAR EN CADA TABLA -->
+                docente = 0;
+                departamento = 0;
+                dedicacion = string.Empty;
+                modalidad = string.Empty;
+                fecha_ingreso = DateTime.MinValue;
+                fecha_salida = DateTime.MinValue;
+                <!-- FIN -->
+
+                currentSele = new Dictionary<string, object>();
+                isNewSele = true;
+ 
+                StateHasChanged();
+ 
+                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito.");
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el aliado. Por favor, intente nuevamente.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar aliado: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el aliado. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task DeleteSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            if (currentSele.TryGetValue("docente", out var prmObj) && prmObj is string prmStr && int.TryParse(prmStr, out int prmInt))
+            {
+                bool success = await ApiService.DeleteEntityAsync("api/proyecto/docente_departamento/docente", prmInt);
+                if (success)
+                {
+                    await JSRuntime.InvokeVoidAsync("hideModal", "deleteModal");
+                    await LoadListados();
+                    await JSRuntime.InvokeVoidAsync("alert", "Aliado eliminada con éxito.");
+                }
+                else
+                {
+                    await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el aliado. Por favor, intente nuevamente.");
+                }
+            }
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar aliado: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el aliado. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task ConsultarSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            var resultado = await ApiService.GetDataAsync($"api/proyecto/docente_departamento/docente/{consulta1}");
+            if (resultado.Any())
+            {
+                var seleConsultada = resultado.First();
+                consulta2 = seleConsultada["departamento"]?.ToString() ?? "";
+                consulta3 = seleConsultada["dedicacion"]?.ToString() ?? "";
+                consulta4 = seleConsultada["modalidad"]?.ToString() ?? "";
+                consulta5 = seleConsultada["fecha_ingreso"]?.ToString() ?? "";
+                consulta6 = seleConsultada["fecha_salida"]?.ToString() ?? "";
+                seleEncontrada = true;
+            }
+            else
+            {
+                consulta2 = "";
+                consulta3 = "";
+                consulta4 = "";
+                consulta5 = "";
+                consulta6 = "";
+                seleEncontrada = false;
+                await JSRuntime.InvokeVoidAsync("alert", "No se encontró ningun aliado con ese ID.");
+            }
+            StateHasChanged();
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al consultar aliado: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar el aliado. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task ModificarSeleConsultada()
+    {
+        <!-- CAMBIAR EN CADA TABLA -->
+        PrepareForAddOrEdit(new Dictionary<string, object>
+        {
+            ["docente"] = consulta1,
+            ["departamento"] = consulta2,
+            ["dedicacion"] = consulta3,
+            ["modalidad"] = consulta4,
+            ["fecha_ingreso"] = consulta5,
+            ["fecha_salida"] = string.IsNullOrEmpty(consulta6) ? null : consulta6
+        });
+        <!-- FIN -->
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("showModal", "addModal");
+    }
+
+    private async Task EliminarSeleConsultada()
+    {
+        SetSeleToDelete(new Dictionary<string, object>
+        {
+            ["docente"] = consulta1,
+            ["departamento"] = consulta2,
+            ["dedicacion"] = consulta3,
+            ["modalidad"] = consulta4,
+            ["fecha_ingreso"] = consulta5,
+            ["fecha_salida"] = consulta6
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("showModal", "deleteModal");
+    }
+}

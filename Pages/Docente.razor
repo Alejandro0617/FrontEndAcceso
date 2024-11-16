@@ -1,0 +1,635 @@
+@page "/docente"
+<!--
+Define la URL relativa que carga este componente. En este caso, cuando un usuario navega a "/docente",
+este componente Blazor se carga y se representa en la página.
+-->
+@using BlazorFrontEnd.Services
+@inject ApiService ApiService
+@inject IJSRuntime JSRuntime
+@inherits ValidacionAcceso
+
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Docentes</b></h2>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nuevo Docente</span>
+                        </a>
+ 
+                        <a href="#consultarModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar Docente</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @if (listado == null)
+            {
+                <p>Cargando...</p>
+            }
+            else if (!listado.Any())
+            {
+                <p>No hay docentes registradas.</p>
+            }
+            else
+            {
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <!-- CAMBIAR EN CADA TABLA -->
+                            <th>Cédula</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Genero</th>
+                            <th>Cargo</th>
+                            <th>Fecha Nacimiento</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Url Cvlac</th>
+                            <th>Fecha Actualización</th>
+                            <th>Escalafón</th>
+                            <th>Perfil</th>
+                            <th>Cat Minciencia</th>
+                            <th>Conv Minciencia</th>
+                            <th>Nacionalidad</th>
+                            <th>Línea Investigación</th>
+                            <!-- FIN -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sele in listado)
+                        {
+                            <tr>
+                                <!-- CAMBIAR EN CADA TABLA -->
+                                <td>@sele["cedula"]</td>
+                                <td>@sele["nombres"]</td>
+                                <td>@sele["apellidos"]</td>
+                                <td>@sele["genero"]</td>
+                                <td>@sele["cargo"]</td>
+                                <td>@sele["fecha_nacimiento"]</td>
+                                <td>@sele["correo"]</td>
+                                <td>@sele["telefono"]</td>
+                                <td>@sele["url_cvlac"]</td>
+                                <td>@sele["fecha_actualizacion"]</td>
+                                <td>@sele["escalafon"]</td>
+                                <td>@sele["perfil"]</td>
+                                <td>@sele["cat_minciencia"]</td>
+                                <td>@sele["conv_minciencia"]</td>
+                                <td>@sele["nacionalidaad"]</td>
+                                <td>@sele["linea_investigacion_principal"]</td>
+                                <!-- FIN -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@currentSele" OnValidSubmit="SaveSele">
+                <DataAnnotationsValidator />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">@(isNewSele ? "Añadir" : "Editar") Docente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- CAMBIAR EN CADA TABLA -->
+                    <div class="form-group">
+                        <label>Cédula</label>
+                        <InputNumber class="form-control" @bind-Value="cedula" />
+                        <ValidationMessage For="@(() => cedula)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Nombres</label>
+                        <InputText class="form-control" @bind-Value="nombres" />
+                        <ValidationMessage For="@(() => nombres)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Apellidos</label>
+                        <InputText class="form-control" @bind-Value="apellidos" />
+                        <ValidationMessage For="@(() => apellidos)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Género</label>
+                        <InputText class="form-control" @bind-Value="genero" />
+                        <ValidationMessage For="@(() => genero)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Cargo</label>
+                        <InputText class="form-control" @bind-Value="cargo" />
+                        <ValidationMessage For="@(() => cargo)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Nacimiento</label>
+                        <InputDate class="form-control" @bind-Value="fecha_nacimiento" />
+                        <ValidationMessage For="@(() => fecha_nacimiento)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Correo</label>
+                        <InputText class="form-control" @bind-Value="correo" />
+                        <ValidationMessage For="@(() => correo)" />
+                    </div>
+                     <div class="form-group">
+                        <label>Teléfono</label>
+                        <InputText class="form-control" @bind-Value="telefono" />
+                        <ValidationMessage For="@(() => telefono)" />
+                    </div>
+                     <div class="form-group">
+                        <label>Url Cvlac</label>
+                        <InputText class="form-control" @bind-Value="url_cvlac" />
+                        <ValidationMessage For="@(() => url_cvlac)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Actualización</label>
+                        <InputDate class="form-control" @bind-Value="fecha_actualizacion" />
+                        <ValidationMessage For="@(() => fecha_actualizacion)" />
+                    </div>
+                     <div class="form-group">
+                        <label>Escalafón</label>
+                        <InputText class="form-control" @bind-Value="escalafon" />
+                        <ValidationMessage For="@(() => escalafon)" />
+                    </div>
+                     <div class="form-group">
+                        <label>Perfil</label>
+                        <InputText class="form-control" @bind-Value="perfil" />
+                        <ValidationMessage For="@(() => perfil)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Cat Minciencia</label>
+                        <InputText class="form-control" @bind-Value="cat_minciencia" />
+                        <ValidationMessage For="@(() => cat_minciencia)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Conv Minciencia</label>
+                        <InputText class="form-control" @bind-Value="conv_minciencia" />
+                        <ValidationMessage For="@(() => conv_minciencia)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Nacionalidad</label>
+                        <InputText class="form-control" @bind-Value="nacionalidaad" />
+                        <ValidationMessage For="@(() => nacionalidaad)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Investigación Principal</label>
+                        <InputNumber class="form-control" @bind-Value="linea_investigacion_principal" />
+                        <ValidationMessage For="@(() => linea_investigacion_principal)" />
+                    </div>
+                    <!-- FIN -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNewSele ? "Añadir" : "Guardar")</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Docente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar esta docente?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteSele">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="consultarModal" tabindex="-1" role="dialog" aria-labelledby="consultarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarModalLabel">Consultar Docente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- CAMBIAR EN CADA TABLA -->
+                <div class="form-group">
+                    <label>Cédula</label>
+                    <input type="text" class="form-control" @bind="consulta1" @bind:event="oninput" />
+                </div>
+                <div class="form-group">
+                    <label>Nombres</label>
+                    <input type="text" class="form-control" @bind="consulta2" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Apellidos</label>
+                    <input type="text" class="form-control" @bind="consulta3" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Género</label>
+                    <input type="text" class="form-control" @bind="consulta4" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Cargo</label>
+                    <input type="text" class="form-control" @bind="consulta5" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Fecha Nacimiento</label>
+                    <input type="text" class="form-control" @bind="consulta6" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Correo</label>
+                    <input type="text" class="form-control" @bind="consulta7" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="text" class="form-control" @bind="consulta8" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Url Cvlac</label>
+                    <input type="text" class="form-control" @bind="consulta9" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Fecha Actualización</label>
+                    <input type="text" class="form-control" @bind="consulta10" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Escalafón</label>
+                    <input type="text" class="form-control" @bind="consulta11" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Perfil</label>
+                    <input type="text" class="form-control" @bind="consulta12" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Cat Minciencia</label>
+                    <input type="text" class="form-control" @bind="consulta13" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Conv Minciencia</label>
+                    <input type="text" class="form-control" @bind="consulta14" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Nacionalidad</label>
+                    <input type="text" class="form-control" @bind="consulta15" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Investigación Principal</label>
+                    <input type="text" class="form-control" @bind="consulta16" readonly />
+                </div>
+                <!-- FIN -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarSele">Consultar</button>
+                <button type="button" class="btn btn-warning" @onclick="ModificarSeleConsultada" disabled="@(!seleEncontrada)">Modificar</button>
+                <button type="button" class="btn btn-danger" @onclick="EliminarSeleConsultada" disabled="@(!seleEncontrada)">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+   
+    private List<Dictionary<string, object>> listado = new List<Dictionary<string, object>>();
+    private Dictionary<string, object> currentSele = new Dictionary<string, object>();
+    private bool isNewSele = true;
+    private bool seleEncontrada = false;
+
+    <!-- CAMBIAR EN CADA TABLA -->
+    private int cedula;
+    private string nombres = "";
+    private string apellidos = "";
+    private string genero = "";
+    private string cargo = "";
+    private DateTime? fecha_nacimiento;
+    private string correo = "";
+    private string telefono = "";
+    private string url_cvlac = "";
+    private DateTime? fecha_actualizacion;
+    private string escalafon = "";
+    private string perfil = "";
+    private string cat_minciencia = "";
+    private string conv_minciencia = "";
+    private string nacionalidaad = "";
+    private int linea_investigacion_principal;
+
+
+    private string consulta1 = "";
+    private string consulta2 = "";
+    private string consulta3 = "";
+    private string consulta4 = "";
+    private string consulta5 = "";
+    private string consulta6 = "";
+    private string consulta7 = "";
+    private string consulta8 = "";
+    private string consulta9 = "";
+    private string consulta10 = "";
+    private string consulta11 = "";
+    private string consulta12 = "";
+    private string consulta13 = "";
+    private string consulta14 = "";
+    private string consulta15 = "";
+    private string consulta16 = "";
+    <!-- FIN -->
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadListados();
+    }
+ 
+    private async Task LoadListados()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            listado = await ApiService.GetDataAsync("api/proyecto/docente");
+            <!-- FIN -->
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("console.log", $"Error al cargar docentes: {ex.Message}");
+            Console.WriteLine($"Error al cargar docentes: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al cargar docentes: "+ex.Message);
+        }
+    }
+ 
+    private void PrepareForAddOrEdit(Dictionary<string, object>? sele = null)
+    {
+        isNewSele = sele == null;
+        currentSele = sele ?? new Dictionary<string, object>();
+
+        <!-- CAMBIAR EN CADA TABLA -->
+        cedula = currentSele.TryGetValue("cedula", out var a) ? Convert.ToInt32(a) : 0;
+        nombres = currentSele.TryGetValue("nombres", out var b) ? b?.ToString() ?? "" : "";
+        apellidos = currentSele.TryGetValue("apellidos", out var c) ? c?.ToString() ?? "" : "";
+        genero = currentSele.TryGetValue("genero", out var d) ? d?.ToString() ?? "" : "";
+        cargo = currentSele.TryGetValue("cargo", out var e) ? e?.ToString() ?? "" : "";
+        fecha_nacimiento = currentSele.TryGetValue("fecha_nacimiento", out var f) ? Convert.ToDateTime(f) : default(DateTime);
+        correo = currentSele.TryGetValue("correo", out var g) ? g?.ToString() ?? "" : "";
+        telefono = currentSele.TryGetValue("telefono", out var h) ? h?.ToString() ?? "" : "";
+        url_cvlac = currentSele.TryGetValue("url_cvlac", out var i) ? i?.ToString() ?? "" : "";
+        fecha_actualizacion = currentSele.TryGetValue("fecha_actualizacion", out var j) ? Convert.ToDateTime(j) : default(DateTime);
+        escalafon = currentSele.TryGetValue("escalafon", out var k) ? k?.ToString() ?? "" : "";
+        perfil = currentSele.TryGetValue("perfil", out var l) ? l?.ToString() ?? "" : "";
+        cat_minciencia = currentSele.TryGetValue("cat_minciencia", out var m) ? m?.ToString() ?? "" : "";
+        conv_minciencia = currentSele.TryGetValue("conv_minciencia", out var n) ? n?.ToString() ?? "" : "";
+        nacionalidaad = currentSele.TryGetValue("nacionalidaad", out var o) ? o?.ToString() ?? "" : "";
+        linea_investigacion_principal = currentSele.TryGetValue("linea_investigacion_principal", out var p) ? Convert.ToInt32(p) : 0;
+        <!-- FIN -->
+       
+        JSRuntime.InvokeVoidAsync("showModal", "editModal");
+    }
+ 
+    private void PrepareForConsulta()
+    {
+        <!-- CAMBIAR EN CADA TABLA -->
+        consulta1 = "";
+        consulta2 = "";
+        consulta3 = "";
+        consulta4 = "";
+        consulta5 = "";
+        consulta6 = "";
+        consulta7 = "";
+        consulta8 = "";
+        consulta9 = "";
+        consulta10 = "";
+        consulta11 = "";
+        consulta12 = "";
+        consulta13 = "";
+        consulta14 = "";
+        consulta15 = "";
+        consulta16 = "";
+        <!-- FIN -->
+        seleEncontrada = false;
+    }
+ 
+    private void SetSeleToDelete(Dictionary<string, object> sele)
+    {
+        currentSele = sele;
+    }
+ 
+    private async Task SaveSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            currentSele["cedula"] = cedula;
+            currentSele["nombres"] = nombres;
+            currentSele["apellidos"] = apellidos;
+            currentSele["genero"] = genero;
+            currentSele["cargo"] = cargo;
+            currentSele["fecha_nacimiento"] = fecha_nacimiento;
+            currentSele["correo"] = correo;
+            currentSele["telefono"] = telefono;
+            currentSele["url_cvlac"] = url_cvlac;
+            currentSele["fecha_actualizacion"] = fecha_actualizacion;
+            currentSele["escalafon"] = escalafon;
+            currentSele["perfil"] = perfil;
+            currentSele["cat_minciencia"] = cat_minciencia;
+            currentSele["conv_minciencia"] = conv_minciencia;
+            currentSele["nacionalidaad"] = nacionalidaad;
+            currentSele["linea_investigacion_principal"] = linea_investigacion_principal;
+            <!-- FIN -->
+ 
+            bool success;
+            if (isNewSele)
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.AddEntityAsync("api/proyecto/docente", currentSele);
+                <!-- FIN -->
+            }
+            else
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.EditEntityAsync("api/proyecto/docente/cedula", cedula, currentSele);
+                <!-- FIN -->
+            }
+ 
+            if (success)
+            {
+                await JSRuntime.InvokeVoidAsync("hideModal", "addModal");
+ 
+                await LoadListados();
+                <!-- CAMBIAR EN CADA TABLA -->
+                cedula = 0;
+                nombres = string.Empty;
+                apellidos = string.Empty;
+                genero = string.Empty;
+                cargo = string.Empty;
+                fecha_nacimiento = DateTime.MinValue;
+                correo = string.Empty;
+                telefono = string.Empty;
+                url_cvlac = string.Empty;
+                fecha_actualizacion = DateTime.MinValue;
+                escalafon = string.Empty;
+                perfil = string.Empty;
+                cat_minciencia = string.Empty;
+                conv_minciencia = string.Empty;
+                nacionalidaad = string.Empty;
+                linea_investigacion_principal = 0;
+                <!-- FIN -->
+
+                currentSele = new Dictionary<string, object>();
+                isNewSele = true;
+ 
+                StateHasChanged();
+ 
+                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito.");
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el docente. Por favor, intente nuevamente.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar docente: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el docente. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task DeleteSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            if (currentSele.TryGetValue("cedula", out var prmObj) && prmObj is string prmStr && int.TryParse(prmStr, out int prmInt))
+            {
+                bool success = await ApiService.DeleteEntityAsync("api/proyecto/docente/cedula", prmInt);
+                if (success)
+                {
+                    await JSRuntime.InvokeVoidAsync("hideModal", "deleteModal");
+                    await LoadListados();
+                    await JSRuntime.InvokeVoidAsync("alert", "Docente eliminada con éxito.");
+                }
+                else
+                {
+                    await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el docente. Por favor, intente nuevamente.");
+                }
+            }
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar docente: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el docente. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task ConsultarSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            var resultado = await ApiService.GetDataAsync($"api/proyecto/docente/cedula/{consulta1}");
+            if (resultado.Any())
+            {
+                var seleConsultada = resultado.First();
+                consulta2 = seleConsultada["nombres"]?.ToString() ?? "";
+                consulta3 = seleConsultada["apellidos"]?.ToString() ?? "";
+                consulta4 = seleConsultada["genero"]?.ToString() ?? "";
+                consulta5 = seleConsultada["cargo"]?.ToString() ?? "";
+                consulta6 = seleConsultada["fecha_nacimiento"]?.ToString() ?? "";
+                consulta7 = seleConsultada["correo"]?.ToString() ?? "";
+                consulta8 = seleConsultada["telefono"]?.ToString() ?? "";
+                consulta9 = seleConsultada["url_cvlac"]?.ToString() ?? "";
+                consulta10 = seleConsultada["fecha_actualizacion"]?.ToString() ?? "";
+                consulta11 = seleConsultada["escalafon"]?.ToString() ?? "";
+                consulta12 = seleConsultada["perfil"]?.ToString() ?? "";
+                consulta13 = seleConsultada["cat_minciencia"]?.ToString() ?? "";
+                consulta14 = seleConsultada["conv_minciencia"]?.ToString() ?? "";
+                consulta15 = seleConsultada["nacionalidaad"]?.ToString() ?? "";
+                consulta16 = seleConsultada["linea_investigacion_principal"]?.ToString() ?? "";
+                seleEncontrada = true;
+            }
+            else
+            {
+                consulta2 = "";
+                consulta3 = "";
+                consulta4 = "";
+                consulta5 = "";
+                consulta6 = "";
+                consulta7 = "";
+                consulta8 = "";
+                consulta9 = "";
+                consulta10 = "";
+                consulta11 = "";
+                consulta12 = "";
+                consulta13 = "";
+                consulta14 = "";
+                consulta15 = "";
+                consulta16 = "";
+                seleEncontrada = false;
+                await JSRuntime.InvokeVoidAsync("alert", "No se encontró ningun docente con ese ID.");
+            }
+            StateHasChanged();
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al consultar docente: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar el docente. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task ModificarSeleConsultada()
+    {
+        <!-- CAMBIAR EN CADA TABLA -->
+        PrepareForAddOrEdit(new Dictionary<string, object>
+        {
+            ["cedula"] = consulta1,
+            ["nombres"] = consulta2,
+            ["apellidos"] = consulta3,
+            ["genero"] = consulta4,
+            ["cargo"] = consulta5,
+            ["fecha_nacimiento"] = consulta6,
+            ["correo"] = consulta7,
+            ["telefono"] = consulta8,
+            ["url_cvlac"] = consulta9,
+            ["fecha_actualizacion"] = consulta10,
+            ["escalafon"] = consulta11,
+            ["perfil"] = consulta12,
+            ["cat_minciencia"] = consulta13,
+            ["conv_minciencia"] = consulta14,
+            ["nacionalidaad"] = consulta15,
+            ["linea_investigacion_principal"] = consulta16
+        });
+        <!-- FIN -->
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("showModal", "addModal");
+    }
+
+    private async Task EliminarSeleConsultada()
+    {
+        SetSeleToDelete(new Dictionary<string, object>
+        {
+            ["cedula"] = consulta1,
+            ["nombres"] = consulta2,
+            ["apellidos"] = consulta3,
+            ["genero"] = consulta4,
+            ["cargo"] = consulta5,
+            ["fecha_nacimiento"] = consulta6,
+            ["correo"] = consulta7,
+            ["telefono"] = consulta8,
+            ["url_cvlac"] = consulta9,
+            ["fecha_actualizacion"] = consulta10,
+            ["escalafon"] = consulta11,
+            ["perfil"] = consulta12,
+            ["cat_minciencia"] = consulta13,
+            ["conv_minciencia"] = consulta14,
+            ["nacionalidaad"] = consulta15,
+            ["linea_investigacion_principal"] = consulta16
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("showModal", "deleteModal");
+    }
+}

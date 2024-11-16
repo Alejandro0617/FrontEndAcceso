@@ -1,0 +1,403 @@
+@page "/alianza"
+<!--
+Define la URL relativa que carga este componente. En este caso, cuando un usuario navega a "/aliado",
+este componente Blazor se carga y se representa en la página.
+-->
+@using BlazorFrontEnd.Services
+@inject ApiService ApiService
+@inject IJSRuntime JSRuntime
+@inherits ValidacionAcceso
+
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Alianza</b></h2>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nueva Alianza</span>
+                        </a>
+ 
+                        <a href="#consultarModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar Alianza</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @if (listado == null)
+            {
+                <p>Cargando...</p>
+            }
+            else if (!listado.Any())
+            {
+                <p>No hay alianzas registradas.</p>
+            }
+            else
+            {
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <!-- CAMBIAR EN CADA TABLA -->
+                            <th>Aliado</th>
+                            <th>Departamento</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
+                            <th>Docente</th>
+                            <!-- FIN -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sele in listado)
+                        {
+                            <tr>
+                                <!-- CAMBIAR EN CADA TABLA -->
+                                <td>@sele["aliado"]</td>
+                                <td>@sele["departamento"]</td>
+                                <td>@sele["fecha_inicio"]</td>
+                                <td>@sele["fecha_fin"]</td>
+                                <td>@sele["docente"]</td>
+                                <!-- FIN -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@currentSele" OnValidSubmit="SaveSele">
+                <DataAnnotationsValidator />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">@(isNewSele ? "Añadir" : "Editar") Alianza</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- CAMBIAR EN CADA TABLA -->
+                    <div class="form-group">
+                        <label>Aliado</label>
+                        <InputNumber class="form-control" @bind-Value="aliado" />
+                        <ValidationMessage For="@(() => aliado)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <InputNumber class="form-control" @bind-Value="departamento" />
+                        <ValidationMessage For="@(() => departamento)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Inicio</label>
+                        <InputDate class="form-control" @bind-Value="fecha_inicio" />
+                        <ValidationMessage For="@(() => fecha_inicio)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Fin</label>
+                        <InputDate class="form-control" @bind-Value="fecha_fin" />
+                        <ValidationMessage For="@(() => fecha_fin)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Docente</label>
+                        <InputNumber class="form-control" @bind-Value="docente" />
+                        <ValidationMessage For="@(() => docente)" />
+                    </div>
+                    <!-- FIN -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNewSele ? "Añadir" : "Guardar")</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Alianza</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar esta alianza?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteSele">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="consultarModal" tabindex="-1" role="dialog" aria-labelledby="consultarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarModalLabel">Consultar Alianza</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- CAMBIAR EN CADA TABLA -->
+                <div class="form-group">
+                    <label>Aliado</label>
+                    <input type="text" class="form-control" @bind="consulta1" @bind:event="oninput" />
+                </div>
+                <div class="form-group">
+                    <label>Departamento</label>
+                    <input type="text" class="form-control" @bind="consulta2" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Fecha Inicio</label>
+                    <input type="text" class="form-control" @bind="consulta3" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Fecha Fin</label>
+                    <input type="text" class="form-control" @bind="consulta4" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Docente</label>
+                    <input type="text" class="form-control" @bind="consulta5" readonly />
+                </div>
+                <!-- FIN -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarSele">Consultar</button>
+                <button type="button" class="btn btn-warning" @onclick="ModificarSeleConsultada" disabled="@(!seleEncontrada)">Modificar</button>
+                <button type="button" class="btn btn-danger" @onclick="EliminarSeleConsultada" disabled="@(!seleEncontrada)">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+   
+    private List<Dictionary<string, object>> listado = new List<Dictionary<string, object>>();
+    private Dictionary<string, object> currentSele = new Dictionary<string, object>();
+    private bool isNewSele = true;
+    private bool seleEncontrada = false;
+
+    <!-- CAMBIAR EN CADA TABLA -->
+    private int aliado;
+    private int departamento;
+    private DateTime? fecha_inicio;
+    private DateTime? fecha_fin;
+    private int docente;
+
+    private string consulta1 = "";
+    private string consulta2 = "";
+    private string consulta3 = "";
+    private string consulta4 = "";
+    private string consulta5 = "";
+    <!-- FIN -->
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadListados();
+    }
+ 
+    private async Task LoadListados()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            listado = await ApiService.GetDataAsync("api/proyecto/alianza");
+            <!-- FIN -->
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("console.log", $"Error al cargar alianzas: {ex.Message}");
+            Console.WriteLine($"Error al cargar alianzas: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al cargar alianzas: "+ex.Message);
+        }
+    }
+ 
+    private void PrepareForAddOrEdit(Dictionary<string, object>? sele = null)
+    {
+        isNewSele = sele == null;
+        currentSele = sele ?? new Dictionary<string, object>();
+
+        <!-- CAMBIAR EN CADA TABLA -->
+        aliado = currentSele.TryGetValue("aliado", out var i) ? Convert.ToInt32(i) : 0;
+        departamento = currentSele.TryGetValue("departamento", out var k) ? Convert.ToInt32(k) : 0;
+        fecha_inicio = currentSele.TryGetValue("fecha_inicio", out var p) ? Convert.ToDateTime(p) : default(DateTime);
+        fecha_fin = currentSele.TryGetValue("fecha_fin", out var l) && l != null ? Convert.ToDateTime(l) : (DateTime?)null;
+        docente = currentSele.TryGetValue("docente", out var o) ? Convert.ToInt32(o) : 0;
+        <!-- FIN -->
+       
+        JSRuntime.InvokeVoidAsync("showModal", "editModal");
+    }
+ 
+    private void PrepareForConsulta()
+    {
+        <!-- CAMBIAR EN CADA TABLA -->
+        consulta1 = "";
+        consulta2 = "";
+        consulta3 = "";
+        consulta4 = "";
+        consulta5 = "";
+        <!-- FIN -->
+        seleEncontrada = false;
+    }
+ 
+    private void SetSeleToDelete(Dictionary<string, object> sele)
+    {
+        currentSele = sele;
+    }
+ 
+    private async Task SaveSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            currentSele["aliado"] = aliado;
+            currentSele["departamento"] = departamento;
+            currentSele["fecha_inicio"] = fecha_inicio;
+            currentSele["fecha_fin"] = fecha_fin.HasValue ? fecha_fin.Value : null;
+            currentSele["docente"] = docente;
+            <!-- FIN -->
+ 
+            bool success;
+            if (isNewSele)
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.AddEntityAsync("api/proyecto/alianza", currentSele);
+                <!-- FIN -->
+            }
+            else
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.EditEntityAsync("api/proyecto/alianza/aliado", aliado, currentSele);
+                <!-- FIN -->
+            }
+ 
+            if (success)
+            {
+                await JSRuntime.InvokeVoidAsync("hideModal", "addModal");
+ 
+                await LoadListados();
+                <!-- CAMBIAR EN CADA TABLA -->
+                aliado = 0;
+                departamento = 0;
+                fecha_inicio = DateTime.MinValue;
+                fecha_fin = DateTime.MinValue;
+                docente = 0;
+                <!-- FIN -->
+
+                currentSele = new Dictionary<string, object>();
+                isNewSele = true;
+ 
+                StateHasChanged();
+ 
+                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito.");
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error al guardar la alianza. Por favor, intente nuevamente.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar alianza: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "ERROR.");
+        }
+    }
+ 
+    private async Task DeleteSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            if (currentSele.TryGetValue("aliado", out var prmObj) && prmObj is string prmStr && int.TryParse(prmStr, out int prmInt))
+            {
+                bool success = await ApiService.DeleteEntityAsync("api/proyecto/alianza/aliado", prmInt);
+                if (success)
+                {
+                    await JSRuntime.InvokeVoidAsync("hideModal", "deleteModal");
+                    await LoadListados();
+                    await JSRuntime.InvokeVoidAsync("alert", "Aliado eliminada con éxito.");
+                }
+                else
+                {
+                    await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar alianza. Por favor, intente nuevamente.");
+                }
+            }
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar alianza: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el alianza. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task ConsultarSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            var resultado = await ApiService.GetDataAsync($"api/proyecto/alianza/aliado/{consulta1}");
+            if (resultado.Any())
+            {
+                var seleConsultada = resultado.First();
+                consulta2 = seleConsultada["departamento"]?.ToString() ?? "";
+                consulta3 = seleConsultada["fecha_inicio"]?.ToString() ?? "";
+                consulta4 = seleConsultada["fecha_fin"]?.ToString() ?? "";
+                consulta5 = seleConsultada["docente"]?.ToString() ?? "";
+                seleEncontrada = true;
+            }
+            else
+            {
+                consulta2 = "";
+                consulta3 = "";
+                consulta4 = "";
+                consulta5 = "";
+                seleEncontrada = false;
+                await JSRuntime.InvokeVoidAsync("alert", "No se encontró ninguna alianza con ese ID.");
+            }
+            StateHasChanged();
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al consultar alianza: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar alianza. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task ModificarSeleConsultada()
+    {
+        <!-- CAMBIAR EN CADA TABLA -->
+        PrepareForAddOrEdit(new Dictionary<string, object>
+        {
+            ["aliado"] = consulta1,
+            ["departamento"] = consulta2,
+            ["fecha_inicio"] = consulta3,
+            ["fecha_fin"] = string.IsNullOrEmpty(consulta4) ? null : consulta4,
+            ["docente"] = consulta5
+        });
+        <!-- FIN -->
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("showModal", "addModal");
+    }
+
+    private async Task EliminarSeleConsultada()
+    {
+        SetSeleToDelete(new Dictionary<string, object>
+        {
+            ["aliado"] = consulta1,
+            ["departamento"] = consulta2,
+            ["fecha_inicio"] = consulta3,
+            ["fecha_fin"] = consulta4,
+            ["docente"] = consulta5
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("showModal", "deleteModal");
+    }
+}

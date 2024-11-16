@@ -1,0 +1,379 @@
+@page "/apoyo_profesoral"
+@using BlazorFrontEnd.Services
+@inject ApiService ApiService
+@inject IJSRuntime JSRuntime
+@inherits ValidacionAcceso
+
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Apoyo Profesoral</b></h2>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nuevo AP</span>
+                        </a>
+ 
+                        <a href="#consultarModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar AP</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @if (listado == null)
+            {
+                <p>Cargando...</p>
+            }
+            else if (!listado.Any())
+            {
+                <p>No hay apoyo profesorales registrados.</p>
+            }
+            else
+            {
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <!-- CAMBIAR EN CADA TABLA -->
+                            <th>Estudios</th>
+                            <th>Con apoyo</th>
+                            <th>Institución</th>
+                            <th>Tipo</th>
+                            <!-- FIN -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sele in listado)
+                        {
+                            <tr>
+                                <!-- CAMBIAR EN CADA TABLA -->
+                                <td>@sele["estudios"]</td>
+                                <td>@sele["con_apoyo"]</td>
+                                <td>@sele["institucion"]</td>
+                                <td>@sele["tipo"]</td>
+                                <!-- FIN -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@currentSele" OnValidSubmit="SaveSele">
+                <DataAnnotationsValidator />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">@(isNewSele ? "Añadir" : "Editar") Apoyo Profesoral</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- CAMBIAR EN CADA TABLA -->
+                    <div class="form-group">
+                        <label>Estudios</label>
+                        <br>
+                        <InputNumber class="form-control" @bind-Value="estudios" />
+                        <ValidationMessage For="@(() => estudios)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Con apoyo</label>
+                        <InputCheckbox @bind-Value="con_apoyo" />
+                        <ValidationMessage For="@(() => con_apoyo)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Institución</label>
+                        <InputText class="form-control" @bind-Value="institucion" />
+                        <ValidationMessage For="@(() => institucion)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <InputText class="form-control" @bind-Value="tipo" />
+                        <ValidationMessage For="@(() => tipo)" />
+                    </div>
+                    <!-- FIN -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNewSele ? "Añadir" : "Guardar")</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Apoyo Profesoral</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar este apoyo profesoral?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteSele">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="consultarModal" tabindex="-1" role="dialog" aria-labelledby="consultarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarModalLabel">Consultar Apoyo Profesoral</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- CAMBIAR EN CADA TABLA -->
+                <div class="form-group">
+                    <label>Estudios</label>
+                    <input type="text" class="form-control" @bind="consultaEstudios" @bind:event="oninput" />
+                </div>
+                <div class="form-group">
+                    <label>Con apoyo</label>
+                    <input type="text" class="form-control" @bind="consultaCA" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Institucion</label>
+                    <input type="text" class="form-control" @bind="consultaInstitucion" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <input type="text" class="form-control" @bind="consultaTipo" readonly />
+                </div>
+                <!-- FIN -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarSele">Consultar</button>
+                <button type="button" class="btn btn-warning" @onclick="ModificarSeleConsultada" disabled="@(!seleEncontrada)">Modificar</button>
+                <button type="button" class="btn btn-danger" @onclick="EliminarSeleConsultada" disabled="@(!seleEncontrada)">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+   
+    private List<Dictionary<string, object>> listado = new List<Dictionary<string, object>>();
+    private Dictionary<string, object> currentSele = new Dictionary<string, object>();
+    private bool isNewSele = true;
+    private bool seleEncontrada = false;
+
+    <!-- CAMBIAR EN CADA TABLA -->
+    private int estudios;
+    private bool con_apoyo;
+    private string institucion = "";
+    private string tipo = "";
+
+    private string consultaEstudios = "";
+    private string consultaCA = "";
+    private string consultaInstitucion = "";
+    private string consultaTipo = "";
+    <!-- FIN -->
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadListados();
+    }
+ 
+    private async Task LoadListados()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            listado = await ApiService.GetDataAsync("api/proyecto/apoyo_profesoral");
+            <!-- FIN -->
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("console.log", $"Error al cargar apoyo profesorales: {ex.Message}");
+            Console.WriteLine($"Error al cargar apoyo profesorales: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al cargar apoyo profesorales: "+ex.Message);
+        }
+    }
+ 
+    private void PrepareForAddOrEdit(Dictionary<string, object>? sele = null)
+    {
+        isNewSele = sele == null;
+        currentSele = sele ?? new Dictionary<string, object>();
+
+        <!-- CAMBIAR EN CADA TABLA -->
+        estudios = currentSele.TryGetValue("estudios", out var i) ? Convert.ToInt32(i) : 0;
+        con_apoyo = currentSele.TryGetValue("con_apoyo", out var n) ? (n?.ToString() == "1") : false;
+        institucion = currentSele.TryGetValue("institucion", out var u) ? u?.ToString() ?? "" : "";
+        tipo = currentSele.TryGetValue("tipo", out var p) ? p?.ToString() ?? "" : "";
+        <!-- FIN -->
+       
+        JSRuntime.InvokeVoidAsync("showModal", "editModal");
+    }
+ 
+    private void PrepareForConsulta()
+    {
+        <!-- CAMBIAR EN CADA TABLA -->
+        consultaEstudios = "";
+        consultaCA = "";
+        consultaInstitucion = "";
+        consultaTipo = "";
+        <!-- FIN -->
+        seleEncontrada = false;
+    }
+ 
+    private void SetSeleToDelete(Dictionary<string, object> sele)
+    {
+        currentSele = sele;
+    }
+ 
+    private async Task SaveSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            currentSele["estudios"] = estudios;
+            currentSele["con_apoyo"] = con_apoyo;
+            currentSele["institucion"] = institucion;
+            currentSele["tipo"] = tipo;
+            <!-- FIN -->
+ 
+            bool success;
+            if (isNewSele)
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.AddEntityAsync("api/proyecto/apoyo_profesoral", currentSele);
+                <!-- FIN -->
+            }
+            else
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.EditEntityAsync("api/proyecto/apoyo_profesoral/estudios", estudios, currentSele);
+                <!-- FIN -->
+            }
+ 
+            if (success)
+            {
+                await JSRuntime.InvokeVoidAsync("hideModal", "addModal");
+ 
+                await LoadListados();
+                <!-- CAMBIAR EN CADA TABLA -->
+                estudios = 0;
+                con_apoyo = false;
+                institucion = string.Empty;
+                tipo = string.Empty;
+                <!-- FIN -->
+
+                currentSele = new Dictionary<string, object>();
+                isNewSele = true;
+ 
+                StateHasChanged();
+ 
+                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito.");
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el apoyo profesoral. Por favor, intente nuevamente.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar apoyo profesorales: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el apoyo profesoral. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task DeleteSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            if (currentSele.TryGetValue("estudios", out var prmObj) && prmObj is string prmStr && int.TryParse(prmStr, out int prmInt))
+            {
+                bool success = await ApiService.DeleteEntityAsync("api/proyecto/apoyo_profesoral/estudios", prmInt);
+                if (success)
+                {
+                    await JSRuntime.InvokeVoidAsync("hideModal", "deleteModal");
+                    await LoadListados();
+                    await JSRuntime.InvokeVoidAsync("alert", "Apoyo profesoral eliminado con éxito.");
+                }
+                else
+                {
+                    await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el apoyo profesoral. Por favor, intente nuevamente.");
+                }
+            }
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar apoyo profesoral: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el apoyo profesoral. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task ConsultarSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            var resultado = await ApiService.GetDataAsync($"api/proyecto/apoyo_profesoral/estudios/{consultaEstudios}");
+            if (resultado.Any())
+            {
+                var seleConsultada = resultado.First();
+                consultaCA = seleConsultada["con_apoyo"]?.ToString() ?? "";
+                consultaInstitucion = seleConsultada["institucion"]?.ToString() ?? "";
+                consultaTipo = seleConsultada["tipo"]?.ToString() ?? "";
+                seleEncontrada = true;
+            }
+            else
+            {
+                consultaCA = "";
+                consultaInstitucion = "";
+                consultaTipo = "";
+                seleEncontrada = false;
+                await JSRuntime.InvokeVoidAsync("alert", "No se encontró ningun apoyo profesoral con ese ID.");
+            }
+            StateHasChanged();
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al consultar apoyo profesoral: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar el apoyo profesoral. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task ModificarSeleConsultada()
+    {
+        <!-- CAMBIAR EN CADA TABLA -->
+        PrepareForAddOrEdit(new Dictionary<string, object>
+        {
+            ["estudios"] = consultaEstudios,
+            ["con_apoyo"] = consultaCA,
+            ["institucion"] = consultaInstitucion,
+            ["tipo"] = consultaTipo
+        });
+        <!-- FIN -->
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("showModal", "addModal");
+    }
+
+    private async Task EliminarSeleConsultada()
+    {
+        SetSeleToDelete(new Dictionary<string, object>
+        {
+                ["estudios"] = consultaEstudios,
+                ["con_apoyo"] = consultaCA,
+                ["institucion"] = consultaInstitucion,
+                ["tipo"] = consultaTipo
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("showModal", "deleteModal");
+    }
+}

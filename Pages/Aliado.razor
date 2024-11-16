@@ -1,0 +1,437 @@
+@page "/aliado"
+<!--
+Define la URL relativa que carga este componente. En este caso, cuando un usuario navega a "/aliado",
+este componente Blazor se carga y se representa en la página.
+-->
+@using BlazorFrontEnd.Services
+@inject ApiService ApiService
+@inject IJSRuntime JSRuntime
+@inherits ValidacionAcceso
+
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Aliados</b></h2>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nuevo Aliado</span>
+                        </a>
+ 
+                        <a href="#consultarModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar Aliado</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @if (listado == null)
+            {
+                <p>Cargando...</p>
+            }
+            else if (!listado.Any())
+            {
+                <p>No hay aliados registradas.</p>
+            }
+            else
+            {
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <!-- CAMBIAR EN CADA TABLA -->
+                            <th>Nit</th>
+                            <th>Razón Social</th>
+                            <th>Nombre Contacto</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Ciudad</th>
+                            <!-- FIN -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sele in listado) // MODIFIED
+                        {
+                            <tr>
+                                <!-- CAMBIAR EN CADA TABLA -->
+                                <td>@sele["nit"]</td>
+                                <td>@sele["razon_social"]</td>
+                                <td>@sele["nombre_contacto"]</td>
+                                <td>@sele["correo"]</td>
+                                <td>@sele["telefono"]</td>
+                                <td>@sele["ciudad"]</td>
+                                <!-- FIN -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@currentSele" OnValidSubmit="SaveSele">
+                <DataAnnotationsValidator />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">@(isNewSele ? "Añadir" : "Editar") Aliado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- CAMBIAR EN CADA TABLA -->
+                    <div class="form-group">
+                        <label>Nit</label>
+                        <InputNumber class="form-control" @bind-Value="nit" />
+                        <ValidationMessage For="@(() => nit)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Razón Social</label>
+                        <InputText class="form-control" @bind-Value="razon_social" />
+                        <ValidationMessage For="@(() => razon_social)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre Contacto</label>
+                        <InputText class="form-control" @bind-Value="nombre_contacto" />
+                        <ValidationMessage For="@(() => nombre_contacto)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Correo</label>
+                        <InputText class="form-control" @bind-Value="correo" />
+                        <ValidationMessage For="@(() => correo)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <InputText class="form-control" @bind-Value="telefono" />
+                        <ValidationMessage For="@(() => telefono)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Ciudad</label>
+                        <InputText class="form-control" @bind-Value="ciudad" />
+                        <ValidationMessage For="@(() => ciudad)" />
+                    </div>
+                    <!-- FIN -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNewSele ? "Añadir" : "Guardar")</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Aliado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar esta aliado?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteSele">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="consultarModal" tabindex="-1" role="dialog" aria-labelledby="consultarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarModalLabel">Consultar Aliado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- CAMBIAR EN CADA TABLA -->
+                <div class="form-group">
+                    <label>Nit</label>
+                    <input type="text" class="form-control" @bind="consulta1" @bind:event="oninput" />
+                </div>
+                <div class="form-group">
+                    <label>Razón Social</label>
+                    <input type="text" class="form-control" @bind="consulta2" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Nombre Contacto</label>
+                    <input type="text" class="form-control" @bind="consulta3" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Correo</label>
+                    <input type="text" class="form-control" @bind="consulta4" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="text" class="form-control" @bind="consulta5" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Ciudad</label>
+                    <input type="text" class="form-control" @bind="consulta6" readonly />
+                </div>
+                <!-- FIN -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarSele">Consultar</button>
+                <button type="button" class="btn btn-warning" @onclick="ModificarSeleConsultada" disabled="@(!seleEncontrada)">Modificar</button>
+                <button type="button" class="btn btn-danger" @onclick="EliminarSeleConsultada" disabled="@(!seleEncontrada)">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+   
+    private List<Dictionary<string, object>> listado = new List<Dictionary<string, object>>();
+    private Dictionary<string, object> currentSele = new Dictionary<string, object>();
+    private bool isNewSele = true;
+    private bool seleEncontrada = false;
+
+    <!-- CAMBIAR EN CADA TABLA -->
+    private int nit;
+    private string razon_social = "";
+    private string nombre_contacto = "";
+    private string correo = "";
+    private string telefono = "";
+    private string ciudad = "";
+
+    private string consulta1 = "";
+    private string consulta2 = "";
+    private string consulta3 = "";
+    private string consulta4 = "";
+    private string consulta5 = "";
+    private string consulta6 = "";
+    <!-- FIN -->
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadListados();
+    }
+ 
+    private async Task LoadListados()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            listado = await ApiService.GetDataAsync("api/proyecto/aliado");
+            <!-- FIN -->
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("console.log", $"Error al cargar aliados: {ex.Message}");
+            Console.WriteLine($"Error al cargar aliados: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al cargar aliados: "+ex.Message);
+        }
+    }
+ 
+    private void PrepareForAddOrEdit(Dictionary<string, object>? sele = null)
+    {
+        isNewSele = sele == null;
+        currentSele = sele ?? new Dictionary<string, object>();
+
+        <!-- CAMBIAR EN CADA TABLA -->
+        nit = currentSele.TryGetValue("nit", out var i) ? Convert.ToInt32(i) : 0;
+        razon_social = currentSele.TryGetValue("razon_social", out var n) ? n?.ToString() ?? "" : "";
+        nombre_contacto = currentSele.TryGetValue("nombre_contacto", out var o) ? o?.ToString() ?? "" : "";
+        correo = currentSele.TryGetValue("correo", out var u) ? u?.ToString() ?? "" : "";
+        telefono = currentSele.TryGetValue("telefono", out var p) ? p?.ToString() ?? "" : "";
+        ciudad = currentSele.TryGetValue("ciudad", out var l) ? l?.ToString() ?? "" : "";
+        <!-- FIN -->
+        //MODIFIED
+        JSRuntime.InvokeVoidAsync("showModal", "editModal");
+        // END MODIFIED
+    }
+ 
+    private void PrepareForConsulta()
+    {
+        <!-- CAMBIAR EN CADA TABLA -->
+        consulta1 = "";
+        consulta2 = "";
+        consulta3 = "";
+        consulta4 = "";
+        consulta5 = "";
+        consulta6 = "";
+        <!-- FIN -->
+        seleEncontrada = false;
+    }
+ 
+    private void SetSeleToDelete(Dictionary<string, object> sele)
+    {
+        // MODIFIED
+        currentSele = sele;
+        // END MODIFIED
+    }
+ 
+    private async Task SaveSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            currentSele["nit"] = nit;
+            currentSele["razon_social"] = razon_social;
+            currentSele["nombre_contacto"] = nombre_contacto;
+            currentSele["correo"] = correo;
+            currentSele["telefono"] = telefono;
+            currentSele["ciudad"] = ciudad;
+            <!-- FIN -->
+ 
+            bool success;
+            if (isNewSele)
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.AddEntityAsync("api/proyecto/aliado", currentSele);
+                <!-- FIN -->
+            }
+            else
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.EditEntityAsync("api/proyecto/aliado/nit", nit, currentSele);
+                <!-- FIN -->
+            }
+ 
+            if (success)
+            {
+                await JSRuntime.InvokeVoidAsync("hideModal", "addModal");
+ 
+                await LoadListados();
+                <!-- CAMBIAR EN CADA TABLA -->
+                nit = 0;
+                razon_social = string.Empty;
+                nombre_contacto = string.Empty;
+                correo = string.Empty;
+                telefono = string.Empty;
+                ciudad = string.Empty;
+                <!-- FIN -->
+
+                currentSele = new Dictionary<string, object>();
+                isNewSele = true;
+ 
+                StateHasChanged();
+ 
+                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito.");
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el aliado. Por favor, intente nuevamente.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar aliado: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el aliado. Por favor, intente nuevamente.");
+        }
+    }
+
+    private async Task DeleteSele()
+    {
+        try
+        {
+            // MODIFIED
+            <!-- CAMBIAR EN CADA TABLA -->
+            if (currentSele.TryGetValue("nit", out var prmObj) && prmObj is string prmStr && int.TryParse(prmStr, out int prmInt))
+            {
+                bool success = await ApiService.DeleteEntityAsync("api/proyecto/aliado/nit", prmInt);
+                if (success)
+                {
+                    await JSRuntime.InvokeVoidAsync("hideModal", "deleteModal");
+                    await LoadListados();
+                    await JSRuntime.InvokeVoidAsync("alert", "Aliado eliminado con éxito.");
+                }
+                else
+                {
+                    await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el aliado. Por favor, intente nuevamente.");
+                }
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "El valor de 'nit' no es un número válido.");
+            }
+            // END MODIFIED
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar aliado: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el aliado. Por favor, intente nuevamente.");
+        }
+    }
+ 
+    private async Task ConsultarSele()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            var resultado = await ApiService.GetDataAsync($"api/proyecto/aliado/nit/{consulta1}");
+            if (resultado.Any())
+            {
+                var seleConsultada = resultado.First();
+                consulta2 = seleConsultada["razon_social"]?.ToString() ?? "";
+                consulta3 = seleConsultada["nombre_contacto"]?.ToString() ?? "";
+                consulta4 = seleConsultada["correo"]?.ToString() ?? "";
+                consulta5 = seleConsultada["telefono"]?.ToString() ?? "";
+                consulta6 = seleConsultada["ciudad"]?.ToString() ?? "";
+                seleEncontrada = true;
+            }
+            else
+            {
+                consulta2 = "";
+                consulta3 = "";
+                consulta4 = "";
+                consulta5 = "";
+                consulta6 = "";
+                seleEncontrada = false;
+                await JSRuntime.InvokeVoidAsync("alert", "No se encontró ningun aliado con ese ID.");
+            }
+            StateHasChanged();
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al consultar aliado: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar el aliado. Por favor, intente nuevamente.");
+        }
+    }
+
+    // MODIFIED
+    private async Task ModificarSeleConsultada()
+    {
+        <!-- CAMBIAR EN CADA TABLA -->
+        PrepareForAddOrEdit(new Dictionary<string, object>
+        {
+            ["nit"] = consulta1,
+            ["razon_social"] = consulta2,
+            ["nombre_contacto"] = consulta3,
+            ["correo"] = consulta4,
+            ["telefono"] = consulta5,
+            ["ciudad"] = consulta6
+        });
+        <!-- FIN -->
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("showModal", "addModal");
+    }
+    // END MODIFIED
+
+    // MODIFIED
+    private async Task EliminarSeleConsultada()
+    {
+        SetSeleToDelete(new Dictionary<string, object>
+        {
+            ["nit"] = consulta1,
+            ["razon_social"] = consulta2,
+            ["nombre_contacto"] = consulta3,
+            ["correo"] = consulta4,
+            ["telefono"] = consulta5,
+            ["ciudad"] = consulta6
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("showModal", "deleteModal");
+    }
+    // END MODIFIED
+}
