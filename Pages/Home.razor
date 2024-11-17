@@ -33,6 +33,13 @@
                 <li>@ruta</li>
             }
         </ul>
+
+        <!-- Botón de Cerrar Sesión -->
+        <div class="mt-4">
+            <button class="btn btn-danger" @onclick="Logout">
+                <i class="material-icons">&#xE879;</i> <span>Cerrar Sesión</span>
+            </button>
+        </div>
     }
 </div>
 
@@ -85,5 +92,22 @@
     private void RedirectToLogin()
     {
         NavigationManager.NavigateTo("/login");
+    }
+
+    private async Task Logout()
+    {
+        try
+        {
+            // Limpia el almacenamiento de sesión
+            await JSRuntime.InvokeVoidAsync("sessionStorage.clear");
+
+            // Redirige al usuario a la página de inicio de sesión
+            NavigationManager.NavigateTo("/login", true);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error durante el cierre de sesión: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("console.error", "Error durante el cierre de sesión:", ex);
+        }
     }
 }

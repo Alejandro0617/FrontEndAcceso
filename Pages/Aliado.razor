@@ -6,6 +6,7 @@ este componente Blazor se carga y se representa en la página.
 @using BlazorFrontEnd.Services
 @inject ApiService ApiService
 @inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
 @inherits ValidacionAcceso
 
 <div class="container-xl">
@@ -24,6 +25,10 @@ este componente Blazor se carga y se representa en la página.
                         <a href="#consultarModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
                             <i class="material-icons">&#xE8B6;</i> <span>Consultar Aliado</span>
                         </a>
+                            <!-- Botón de cerrar sesión -->
+                             <button class="btn btn-danger" @onclick="Logout">
+                                <i class="material-icons">&#xE879;</i> <span>Cerrar Sesión</span>
+                            </button>
                     </div>
                 </div>
             </div>
@@ -434,4 +439,20 @@ este componente Blazor se carga y se representa en la página.
         await JSRuntime.InvokeVoidAsync("showModal", "deleteModal");
     }
     // END MODIFIED
+    private async Task Logout()
+    {
+        try
+        {
+            // Limpia el almacenamiento de sesión
+            await JSRuntime.InvokeVoidAsync("sessionStorage.clear");
+
+            // Redirige al usuario a la página de inicio de sesión
+            NavigationManager.NavigateTo("/login", true);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error durante el cierre de sesión: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("console.error", "Error durante el cierre de sesión:", ex);
+        }
+    }
 }
