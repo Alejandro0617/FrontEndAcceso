@@ -4,60 +4,43 @@
 @inject NavigationManager Navigation 
 @inject IJSRuntime JSRuntime 
 
-<!-- Sección de diseño de la página de login -->
-<section class="vh-100">
-  <div class="container-fluid h-custom">
+<section class="vh-100" style="background-color: black; color: white;">
+  <div class="container-fluid h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
+      
       <!-- Imagen ilustrativa del formulario de login -->
-      <div class="col-md-9 col-lg-6 col-xl-5">
-        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-          class="img-fluid" alt="Sample image">
+      <div class="col-md-9 col-lg-6 col-xl-5 text-center">
+        <img src="https://i.imgur.com/6b6psnA.png" 
+             class="rounded-circle img-fluid mb-4" alt="Logo" 
+             style="width: 120px; height: 120px;">
+        <h2 style="font-weight: bold;">Inicia Sesión</h2>
       </div>
       
-      <!-- Formulario de login con Blazor -->
+      <!-- Formulario de login -->
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
         <EditForm Model="@modeloLogin" OnValidSubmit="ManejarLogin">
-          <!-- Inicia el formulario de login usando EditForm -->
           
-          <!-- Botones de inicio de sesión externos (por ejemplo, redes sociales) -->
-          <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-            <p class="lead fw-normal mb-0 me-3">Sign in with</p>
-            <button type="button" class="btn btn-primary btn-floating mx-1">
-              <i class="fab fa-facebook-f"></i>
-            </button>
-            <button type="button" class="btn btn-primary btn-floating mx-1">
-              <i class="fab fa-twitter"></i>
-            </button>
-            <button type="button" class="btn btn-primary btn-floating mx-1">
-              <i class="fab fa-linkedin-in"></i>
-            </button>
-          </div>
-
-          <!-- Divisor visual -->
-          <div class="divider d-flex align-items-center my-4">
-            <p class="text-center fw-bold mx-3 mb-0">Or</p>
-          </div>
-
-          <!-- Campo de entrada para el correo electrónico -->
+          <!-- Campo de entrada para el usuario -->
           <div class="form-outline mb-4">
-            <InputText id="form3Example3" class="form-control form-control-lg" 
-                       @bind-Value="modeloLogin.Correo" placeholder="Enter a valid email address" />
-            <label class="form-label" for="form3Example3">Email address</label>
+            <InputText id="username" class="form-control form-control-lg" 
+                       @bind-Value="modeloLogin.Correo" placeholder="Usuario" 
+                       style="border-radius: 0.5rem; font-size: 1.2rem; padding: 0.75rem;" />
             <ValidationMessage For="@(() => modeloLogin.Correo)" />
           </div>
 
           <!-- Campo de entrada para la contraseña -->
-          <div class="form-outline mb-3">
-            <InputText id="form3Example4" type="password" class="form-control form-control-lg" 
-                       @bind-Value="modeloLogin.Contrasena" placeholder="Enter password" />
-            <label class="form-label" for="form3Example4">Password</label>
+          <div class="form-outline mb-4">
+            <InputText id="password" type="password" class="form-control form-control-lg" 
+                       @bind-Value="modeloLogin.Contrasena" placeholder="Contraseña" 
+                       style="border-radius: 0.5rem; font-size: 1.2rem; padding: 0.75rem;" />
             <ValidationMessage For="@(() => modeloLogin.Contrasena)" />
           </div>
 
-          <!-- Botón de envío del formulario -->
-          <div class="text-center text-lg-start mt-4 pt-2">
-            <button type="submit" class="btn btn-primary btn-lg" 
-                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
+          <!-- Botón de envío -->
+          <div class="text-center">
+            <button type="submit" class="btn btn-lg btn-primary w-100" 
+                    style="background-color: #6610f2; border: none; border-radius: 0.5rem; 
+                           font-size: 1.2rem; padding: 0.75rem;">Entrar</button>
           </div>
         </EditForm>
       </div>
