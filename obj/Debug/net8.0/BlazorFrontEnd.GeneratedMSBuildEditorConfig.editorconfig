@@ -13,99 +13,99 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = browser
 build_property.RootNamespace = BlazorFrontEnd
 build_property.RootNamespace = BlazorFrontEnd
-build_property.ProjectDir = C:\Users\Acer\Downloads\BlazorFrontEnd-ControlAcceso\BlazorFrontEnd\
+build_property.ProjectDir = C:\Users\jose_\OneDrive\Documentos\Proyectos VS Code\GITHUB\FrontEndAcceso\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = false
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Acer\Downloads\BlazorFrontEnd-ControlAcceso\BlazorFrontEnd
+build_property.MSBuildProjectDirectory = C:\Users\jose_\OneDrive\Documentos\Proyectos VS Code\GITHUB\FrontEndAcceso
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/App.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Aliado.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Aliado.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWxpYWRvLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Alianza.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Alianza.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWxpYW56YS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Apoyo_profesoral.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Apoyo_profesoral.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXBveW9fcHJvZmVzb3JhbC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Beca.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Beca.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQmVjYS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Docente.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Docente.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jZW50ZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Docente_departamento.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Docente_departamento.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jZW50ZV9kZXBhcnRhbWVudG8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Estudios_realizados.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Estudios_realizados.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXN0dWRpb3NfcmVhbGl6YWRvcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Estudio_ac.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Estudio_ac.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXN0dWRpb19hYy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Evaluacion_docente.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Evaluacion_docente.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXZhbHVhY2lvbl9kb2NlbnRlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Experiencia.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Experiencia.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXhwZXJpZW5jaWEucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Home.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Intereses_futuros.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Intereses_futuros.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW50ZXJlc2VzX2Z1dHVyb3MucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Login.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Logout.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Logout.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nb3V0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Reconocimiento.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Reconocimiento.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVjb25vY2ltaWVudG8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Red.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Red.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVkLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Red_docente.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Red_docente.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVkX2RvY2VudGUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Pages/Usuarios.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Pages/Usuarios.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXN1YXJpb3MucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/_Imports.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Layout/MainLayout.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-msf2p0x9on
 
-[C:/Users/Acer/Downloads/BlazorFrontEnd-ControlAcceso/BlazorFrontEnd/Layout/NavMenu.razor]
+[C:/Users/jose_/OneDrive/Documentos/Proyectos VS Code/GITHUB/FrontEndAcceso/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-9m9x83kvrv
