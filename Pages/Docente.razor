@@ -1,8 +1,5 @@
 @page "/docente"
-<!--
-Define la URL relativa que carga este componente. En este caso, cuando un usuario navega a "/docente",
-este componente Blazor se carga y se representa en la página.
--->
+
 @using BlazorFrontEnd.Services
 @inject ApiService ApiService
 @inject IJSRuntime JSRuntime
@@ -25,10 +22,9 @@ este componente Blazor se carga y se representa en la página.
                         <a href="#consultarModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
                             <i class="material-icons">&#xE8B6;</i> <span>Consultar Docente</span>
                         </a>
-                            <!-- Botón de cerrar sesión -->
-                             <button class="btn btn-danger" @onclick="Logout">
+                        <button class="btn btn-danger" @onclick="Logout">
                                 <i class="material-icons">&#xE879;</i> <span>Cerrar Sesión</span>
-                            </button>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -95,6 +91,71 @@ este componente Blazor se carga y se representa en la página.
         </div>
     </div>
 </div>
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Gestionar <b>Docente Departamento</b></h2>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="#addModal2" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit2()">
+                            <i class="material-icons">&#xE147;</i> <span>Añadir Nuevo Docente Dep.</span>
+                        </a>
+ 
+                        <a href="#consultarModal2" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta2">
+                            <i class="material-icons">&#xE8B6;</i> <span>Consultar Docente Dep.</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @if (listado2 == null)
+            {
+                <p>Cargando...</p>
+            }
+            else if (!listado2.Any())
+            {
+                <p>No hay departamentos docentes registrados.</p>
+            }
+            else
+            {
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <!-- CAMBIAR EN CADA TABLA -->
+                            <th>Id</th>
+                            <th>Docente</th>
+                            <th>Departamento</th>
+                            <th>Dedicación</th>
+                            <th>Modalidad</th>
+                            <th>Fecha Ingreso</th>
+                            <th>Fecha Sálida</th>
+                            <!-- FIN -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sele in listado2)
+                        {
+                            <tr>
+                                <!-- CAMBIAR EN CADA TABLA -->
+                                <td>@sele["id"]</td>
+                                <td>@sele["docente"]</td>
+                                <td>@sele["departamento"]</td>
+                                <td>@sele["dedicacion"]</td>
+                                <td>@sele["modalidad"]</td>
+                                <td>@sele["fecha_ingreso"]</td>
+                                <td>@sele["fecha_salida"]</td>
+                                <!-- FIN -->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -196,6 +257,57 @@ este componente Blazor se carga y se representa en la página.
         </div>
     </div>
 </div>
+<div class="modal fade" id="addModal2" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <EditForm Model="@currentSele2" OnValidSubmit="SaveSele2">
+                <DataAnnotationsValidator />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">@(isNewSele2 ? "Añadir" : "Editar") Docente Dep.</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- CAMBIAR EN CADA TABLA -->
+                    <div class="form-group">
+                        <label>Docente</label>
+                        <InputNumber class="form-control" @bind-Value="docente" />
+                        <ValidationMessage For="@(() => docente)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <InputNumber class="form-control" @bind-Value="departamento" />
+                        <ValidationMessage For="@(() => departamento)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Dedicación</label>
+                        <InputText class="form-control" @bind-Value="dedicacion" />
+                        <ValidationMessage For="@(() => dedicacion)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Modalidad</label>
+                        <InputText class="form-control" @bind-Value="modalidad" />
+                        <ValidationMessage For="@(() => modalidad)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Ingreso</label>
+                        <InputDate class="form-control" @bind-Value="fecha_ingreso" />
+                        <ValidationMessage For="@(() => fecha_ingreso)" />
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Sálida</label>
+                        <InputDate class="form-control" @bind-Value="fecha_salida" />
+                        <ValidationMessage For="@(() => fecha_salida)" />
+                    </div>
+                    <!-- FIN -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">@(isNewSele2 ? "Añadir" : "Guardar")</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -211,6 +323,24 @@ este componente Blazor se carga y se representa en la página.
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-danger" @onclick="DeleteSele">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteModal2" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Eliminar Docente Dep.</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea eliminar este Docente Dep.?</p>
+                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" @onclick="DeleteSele2">Eliminar</button>
             </div>
         </div>
     </div>
@@ -300,6 +430,54 @@ este componente Blazor se carga y se representa en la página.
         </div>
     </div>
 </div>
+<div class="modal fade" id="consultarModal2" tabindex="-1" role="dialog" aria-labelledby="consultarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="consultarModalLabel">Consultar Docente Dep.</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- CAMBIAR EN CADA TABLA -->
+                <div class="form-group">
+                    <label>Id</label>
+                    <input type="text" class="form-control" @bind="consulta17" @bind:event="oninput" />
+                </div>
+                <div class="form-group">
+                    <label>Docente</label>
+                    <input type="text" class="form-control" @bind="consulta18" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Departamento</label>
+                    <input type="text" class="form-control" @bind="consulta19" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Dedicación</label>
+                    <input type="text" class="form-control" @bind="consulta20" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Modalidad</label>
+                    <input type="text" class="form-control" @bind="consulta21" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Fecha Ingreso</label>
+                    <input type="text" class="form-control" @bind="consulta22" readonly />
+                </div>
+                <div class="form-group">
+                    <label>Fecha Sálida</label>
+                    <input type="text" class="form-control" @bind="consulta23" readonly />
+                </div>
+                <!-- FIN -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" @onclick="ConsultarSele2">Consultar</button>
+                <button type="button" class="btn btn-warning" @onclick="ModificarSeleConsultada2" disabled="@(!seleEncontrada2)">Modificar</button>
+                <button type="button" class="btn btn-danger" @onclick="EliminarSeleConsultada2" disabled="@(!seleEncontrada2)">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
    
@@ -307,6 +485,11 @@ este componente Blazor se carga y se representa en la página.
     private Dictionary<string, object> currentSele = new Dictionary<string, object>();
     private bool isNewSele = true;
     private bool seleEncontrada = false;
+
+    private List<Dictionary<string, object>> listado2 = new List<Dictionary<string, object>>();
+    private Dictionary<string, object> currentSele2 = new Dictionary<string, object>();
+    private bool isNewSele2 = true;
+    private bool seleEncontrada2 = false;
 
     <!-- CAMBIAR EN CADA TABLA -->
     private int cedula;
@@ -325,8 +508,6 @@ este componente Blazor se carga y se representa en la página.
     private string conv_minciencia = "";
     private string nacionalidaad = "";
     private int linea_investigacion_principal;
-
-
     private string consulta1 = "";
     private string consulta2 = "";
     private string consulta3 = "";
@@ -343,6 +524,21 @@ este componente Blazor se carga y se representa en la página.
     private string consulta14 = "";
     private string consulta15 = "";
     private string consulta16 = "";
+
+    private int id;
+    private int docente;
+    private int departamento;
+    private string dedicacion = "";
+    private string modalidad = "";
+    private DateTime? fecha_ingreso;
+    private DateTime? fecha_salida;
+    private string consulta17 = "";
+    private string consulta18 = "";
+    private string consulta19 = "";
+    private string consulta20 = "";
+    private string consulta21 = "";
+    private string consulta22 = "";
+    private string consulta23 = "";
     <!-- FIN -->
 
     protected override async Task OnInitializedAsync()
@@ -356,6 +552,7 @@ este componente Blazor se carga y se representa en la página.
         {
             <!-- CAMBIAR EN CADA TABLA -->
             listado = await ApiService.GetDataAsync("api/proyecto/docente");
+            listado2 = await ApiService.GetDataAsync("api/proyecto/docente_departamento");
             <!-- FIN -->
             StateHasChanged();
         }
@@ -393,6 +590,22 @@ este componente Blazor se carga y se representa en la página.
        
         JSRuntime.InvokeVoidAsync("showModal", "editModal");
     }
+    private void PrepareForAddOrEdit2(Dictionary<string, object>? sele = null)
+    {
+        isNewSele2 = sele == null;
+        currentSele2 = sele ?? new Dictionary<string, object>();
+
+        <!-- CAMBIAR EN CADA TABLA -->
+        docente = currentSele2.TryGetValue("docente", out var a) ? Convert.ToInt32(a) : 0;
+        departamento = currentSele2.TryGetValue("departamento", out var b) ? Convert.ToInt32(b) : 0;
+        dedicacion = currentSele2.TryGetValue("dedicacion", out var n) ? n?.ToString() ?? "" : "";
+        modalidad = currentSele2.TryGetValue("modalidad", out var o) ? o?.ToString() ?? "" : "";
+        fecha_ingreso = currentSele2.TryGetValue("fecha_ingreso", out var p) ? Convert.ToDateTime(p) : default(DateTime);
+        fecha_salida = currentSele2.TryGetValue("fecha_salida", out var l) && l != null ? Convert.ToDateTime(l) : (DateTime?)null;
+        <!-- FIN -->
+       
+        JSRuntime.InvokeVoidAsync("showModal", "editModal2");
+    }
  
     private void PrepareForConsulta()
     {
@@ -416,10 +629,25 @@ este componente Blazor se carga y se representa en la página.
         <!-- FIN -->
         seleEncontrada = false;
     }
+    private void PrepareForConsulta2()
+    {
+        consulta17 = "";
+        consulta18 = "";
+        consulta19 = "";
+        consulta20 = "";
+        consulta21 = "";
+        consulta22 = "";
+        consulta23 = "";
+        seleEncontrada2 = false;
+    }
  
     private void SetSeleToDelete(Dictionary<string, object> sele)
     {
         currentSele = sele;
+    }
+    private void SetSeleToDelete2(Dictionary<string, object> sele)
+    {
+        currentSele2 = sele;
     }
  
     private async Task SaveSele()
@@ -501,6 +729,63 @@ este componente Blazor se carga y se representa en la página.
             await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el docente. Por favor, intente nuevamente.");
         }
     }
+    private async Task SaveSele2()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            currentSele2["docente"] = docente;
+            currentSele2["departamento"] = departamento;
+            currentSele2["dedicacion"] = dedicacion;
+            currentSele2["modalidad"] = modalidad;
+            currentSele2["fecha_ingreso"] = fecha_ingreso;
+            currentSele2["fecha_salida"] = fecha_salida.HasValue ? fecha_salida.Value : null;
+            <!-- FIN -->
+ 
+            bool success;
+            if (isNewSele2)
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.AddEntityAsync("api/proyecto/docente_departamento", currentSele2);
+                <!-- FIN -->
+            }
+            else
+            {
+                <!-- CAMBIAR EN CADA TABLA -->
+                success = await ApiService.EditEntityAsync("api/proyecto/docente_departamento/docente", docente, currentSele2);
+                <!-- FIN -->
+            }
+ 
+            if (success)
+            {
+                await JSRuntime.InvokeVoidAsync("hideModal", "addModal2");
+ 
+                await LoadListados();
+                docente = 0;
+                departamento = 0;
+                dedicacion = string.Empty;
+                modalidad = string.Empty;
+                fecha_ingreso = DateTime.MinValue;
+                fecha_salida = DateTime.MinValue;
+
+                currentSele2 = new Dictionary<string, object>();
+                isNewSele2 = true;
+ 
+                StateHasChanged();
+ 
+                await JSRuntime.InvokeVoidAsync("alert", "Operación realizada con éxito.");
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el aliado. Por favor, intente nuevamente.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar aliado: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al guardar el aliado. Por favor, intente nuevamente.");
+        }
+    }
  
     private async Task DeleteSele()
     {
@@ -527,6 +812,34 @@ este componente Blazor se carga y se representa en la página.
         {
             Console.WriteLine($"Error al eliminar docente: {ex.Message}");
             await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el docente. Por favor, intente nuevamente.");
+        }
+    }
+    private async Task DeleteSele2()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            if (currentSele2.TryGetValue("id", out var prmObj) && prmObj is string prmStr && int.TryParse(prmStr, out int prmInt))
+            {
+                bool success = await ApiService.DeleteEntityAsync("api/proyecto/docente_departamento/id", prmInt);
+                if (success)
+                {
+                    await JSRuntime.InvokeVoidAsync("hideModal", "deleteModal2");
+                    await LoadListados();
+                    await JSRuntime.InvokeVoidAsync("alert", "Aliado eliminada con éxito.");
+                }
+                else
+                {
+                    await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el aliado. Por favor, intente nuevamente.");
+                }
+            }
+            //await JSRuntime.InvokeVoidAsync("console.log", "No entró al if");
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar aliado: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al eliminar el aliado. Por favor, intente nuevamente.");
         }
     }
  
@@ -585,6 +898,43 @@ este componente Blazor se carga y se representa en la página.
             await JSRuntime.InvokeVoidAsync("alert", "Error al consultar el docente. Por favor, intente nuevamente.");
         }
     }
+    private async Task ConsultarSele2()
+    {
+        try
+        {
+            <!-- CAMBIAR EN CADA TABLA -->
+            var resultado = await ApiService.GetDataAsync($"api/proyecto/docente_departamento/id/{consulta17}");
+            if (resultado.Any())
+            {
+                var seleConsultada2 = resultado.First();
+                consulta18 = seleConsultada2["docente"]?.ToString() ?? "";
+                consulta19 = seleConsultada2["departamento"]?.ToString() ?? "";
+                consulta20 = seleConsultada2["dedicacion"]?.ToString() ?? "";
+                consulta21 = seleConsultada2["modalidad"]?.ToString() ?? "";
+                consulta22 = seleConsultada2["fecha_ingreso"]?.ToString() ?? "";
+                consulta23 = seleConsultada2["fecha_salida"]?.ToString() ?? "";
+                seleEncontrada2 = true;
+            }
+            else
+            {
+                consulta18 = "";
+                consulta19 = "";
+                consulta20 = "";
+                consulta21 = "";
+                consulta22 = "";
+                consulta23 = "";
+                seleEncontrada2 = false;
+                await JSRuntime.InvokeVoidAsync("alert", "No se encontró ningun aliado con ese ID.");
+            }
+            StateHasChanged();
+            <!-- FIN -->
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al consultar aliado: {ex.Message}");
+            await JSRuntime.InvokeVoidAsync("alert", "Error al consultar el aliado. Por favor, intente nuevamente.");
+        }
+    }
  
     private async Task ModificarSeleConsultada()
     {
@@ -612,6 +962,22 @@ este componente Blazor se carga y se representa en la página.
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
         await JSRuntime.InvokeVoidAsync("showModal", "addModal");
     }
+    private async Task ModificarSeleConsultada2()
+    {
+        <!-- CAMBIAR EN CADA TABLA -->
+        PrepareForAddOrEdit2(new Dictionary<string, object>
+        {
+            ["docente"] = consulta18,
+            ["departamento"] = consulta19,
+            ["dedicacion"] = consulta20,
+            ["modalidad"] = consulta21,
+            ["fecha_ingreso"] = consulta22,
+            ["fecha_salida"] = string.IsNullOrEmpty(consulta23) ? null : consulta23
+        });
+        <!-- FIN -->
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal2");
+        await JSRuntime.InvokeVoidAsync("showModal", "addModal2");
+    }
 
     private async Task EliminarSeleConsultada()
     {
@@ -636,6 +1002,21 @@ este componente Blazor se carga y se representa en la página.
         });
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
         await JSRuntime.InvokeVoidAsync("showModal", "deleteModal");
+    }
+    private async Task EliminarSeleConsultada2()
+    {
+        SetSeleToDelete2(new Dictionary<string, object>
+        {
+            ["id"] = consulta17,
+            ["docente"] = consulta18,
+            ["departamento"] = consulta19,
+            ["dedicacion"] = consulta20,
+            ["modalidad"] = consulta21,
+            ["fecha_ingreso"] = consulta22,
+            ["fecha_salida"] = consulta23
+        });
+        await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal2");
+        await JSRuntime.InvokeVoidAsync("showModal", "deleteModal2");
     }
 
     private async Task Logout()
