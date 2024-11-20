@@ -5,12 +5,12 @@
     <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
     <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
     <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
-    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\jose_\.nuget\packages\</NuGetPackageFolders>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\Acer\.nuget\packages\</NuGetPackageFolders>
     <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
-    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.11.1</NuGetToolVersion>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.11.0</NuGetToolVersion>
   </PropertyGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <SourceRoot Include="C:\Users\jose_\.nuget\packages\" />
+    <SourceRoot Include="C:\Users\Acer\.nuget\packages\" />
   </ItemGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)microsoft.net.sdk.webassembly.pack\8.0.8\build\Microsoft.NET.Sdk.WebAssembly.Pack.props" Condition="Exists('$(NuGetPackageRoot)microsoft.net.sdk.webassembly.pack\8.0.8\build\Microsoft.NET.Sdk.WebAssembly.Pack.props')" />
@@ -18,10 +18,10 @@
     <Import Project="$(NuGetPackageRoot)microsoft.aspnetcore.components.webassembly\8.0.8\build\net8.0\Microsoft.AspNetCore.Components.WebAssembly.props" Condition="Exists('$(NuGetPackageRoot)microsoft.aspnetcore.components.webassembly\8.0.8\build\net8.0\Microsoft.AspNetCore.Components.WebAssembly.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgMicrosoft_NET_Sdk_WebAssembly_Pack Condition=" '$(PkgMicrosoft_NET_Sdk_WebAssembly_Pack)' == '' ">C:\Users\jose_\.nuget\packages\microsoft.net.sdk.webassembly.pack\8.0.8</PkgMicrosoft_NET_Sdk_WebAssembly_Pack>
-    <PkgMicrosoft_NET_ILLink_Tasks Condition=" '$(PkgMicrosoft_NET_ILLink_Tasks)' == '' ">C:\Users\jose_\.nuget\packages\microsoft.net.illink.tasks\8.0.8</PkgMicrosoft_NET_ILLink_Tasks>
-    <PkgMicrosoft_AspNetCore_Components_WebAssembly_DevServer Condition=" '$(PkgMicrosoft_AspNetCore_Components_WebAssembly_DevServer)' == '' ">C:\Users\jose_\.nuget\packages\microsoft.aspnetcore.components.webassembly.devserver\8.0.8</PkgMicrosoft_AspNetCore_Components_WebAssembly_DevServer>
-    <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\jose_\.nuget\packages\awssdk.core\3.7.400.53</PkgAWSSDK_Core>
-    <PkgAWSSDK_SecurityToken Condition=" '$(PkgAWSSDK_SecurityToken)' == '' ">C:\Users\jose_\.nuget\packages\awssdk.securitytoken\3.7.401.2</PkgAWSSDK_SecurityToken>
+    <PkgMicrosoft_NET_Sdk_WebAssembly_Pack Condition=" '$(PkgMicrosoft_NET_Sdk_WebAssembly_Pack)' == '' ">C:\Users\Acer\.nuget\packages\microsoft.net.sdk.webassembly.pack\8.0.8</PkgMicrosoft_NET_Sdk_WebAssembly_Pack>
+    <PkgMicrosoft_NET_ILLink_Tasks Condition=" '$(PkgMicrosoft_NET_ILLink_Tasks)' == '' ">C:\Users\Acer\.nuget\packages\microsoft.net.illink.tasks\8.0.8</PkgMicrosoft_NET_ILLink_Tasks>
+    <PkgMicrosoft_AspNetCore_Components_WebAssembly_DevServer Condition=" '$(PkgMicrosoft_AspNetCore_Components_WebAssembly_DevServer)' == '' ">C:\Users\Acer\.nuget\packages\microsoft.aspnetcore.components.webassembly.devserver\8.0.8</PkgMicrosoft_AspNetCore_Components_WebAssembly_DevServer>
+    <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\Acer\.nuget\packages\awssdk.core\3.7.400.53</PkgAWSSDK_Core>
+    <PkgAWSSDK_SecurityToken Condition=" '$(PkgAWSSDK_SecurityToken)' == '' ">C:\Users\Acer\.nuget\packages\awssdk.securitytoken\3.7.401.2</PkgAWSSDK_SecurityToken>
   </PropertyGroup>
 </Project>

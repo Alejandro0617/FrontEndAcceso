@@ -9289,3 +9289,13 @@ C:\Users\jose_\OneDrive\Documentos\Proyectos VS Code\GITHUB\FrontEndAcceso\obj\D
 C:\Users\jose_\OneDrive\Documentos\Proyectos VS Code\GITHUB\FrontEndAcceso\obj\Debug\net8.0\refint\BlazorFrontEnd.dll
 C:\Users\jose_\OneDrive\Documentos\Proyectos VS Code\GITHUB\FrontEndAcceso\obj\Debug\net8.0\BlazorFrontEnd.pdb
 C:\Users\jose_\OneDrive\Documentos\Proyectos VS Code\GITHUB\FrontEndAcceso\obj\Debug\net8.0\ref\BlazorFrontEnd.dll
+C:\Users\Acer\Downloads\BlazorFrontEnd-ControlAcceso\BlazorFrontEnd\bin\Debug\net8.0\wwwroot\_framework\AWSSDK.Core.wasm
+C:\Users\Acer\Downloads\BlazorFrontEnd-ControlAcceso\BlazorFrontEnd\bin\Debug\net8.0\wwwroot\_framework\AWSSDK.SecurityToken.wasm
+C:\Users\Acer\Downloads\BlazorFrontEnd-ControlAcceso\BlazorFrontEnd\bin\Debug\net8.0\wwwroot\_framework\AWSSDK.SecurityToken.wasm.gz
+C:\Users\Acer\Downloads\BlazorFrontEnd-ControlAcceso\BlazorFrontEnd\bin\Debug\net8.0\wwwroot\_framework\AWSSDK.Core.wasm.gz
+C:\Users\Acer\Downloads\BlazorFrontEnd-ControlAcceso\BlazorFrontEnd\bin\Debug\net8.0\AWSSDK.Core.dll
+C:\Users\Acer\Downloads\BlazorFrontEnd-ControlAcceso\BlazorFrontEnd\bin\Debug\net8.0\AWSSDK.SecurityToken.dll
+C:\Users\Acer\Downloads\BlazorFrontEnd-ControlAcceso\BlazorFrontEnd\obj\Debug\net8.0\webcil\AWSSDK.Core.wasm
+C:\Users\Acer\Downloads\BlazorFrontEnd-ControlAcceso\BlazorFrontEnd\obj\Debug\net8.0\webcil\AWSSDK.SecurityToken.wasm
+C:\Users\Acer\Downloads\BlazorFrontEnd-ControlAcceso\BlazorFrontEnd\obj\Debug\net8.0\compressed\725kgdg3ps.gz
+C:\Users\Acer\Downloads\BlazorFrontEnd-ControlAcceso\BlazorFrontEnd\obj\Debug\net8.0\compressed\4a0o8wap70.gz
