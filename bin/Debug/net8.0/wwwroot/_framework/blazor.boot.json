@@ -1,12 +1,16 @@
 {
   "mainAssemblyName": "BlazorFrontEnd",
   "resources": {
+<<<<<<< HEAD
     "hash": "sha256-Ar+GQ2pPSS7Zs6UQOjZkOj0RJ2w5qVfLqUZ00J9qoFg=",
+=======
+    "hash": "sha256-s4QmJl1Mtzpqh870pQZTTemLrcuSLnFaUiOKuHJusm4=",
+>>>>>>> 516cdfc27b4e4521995c9de944146e41196d6325
     "jsModuleNative": {
-      "dotnet.native.8.0.8.31y9bavv6u.js": "sha256-juC5sA7gHTLXFEhAKgdM2/RavswpwCtDfjYGsAz2FXg="
+      "dotnet.native.8.0.8.jahbk5zva7.js": "sha256-juC5sA7gHTLXFEhAKgdM2/RavswpwCtDfjYGsAz2FXg="
     },
     "jsModuleRuntime": {
-      "dotnet.runtime.8.0.8.v1x3n4227l.js": "sha256-0Dpj/NkVD5WqSC16ZvJLmlc38iv9+Je+umYBVOycPVU="
+      "dotnet.runtime.8.0.8.5rlyqlp8ii.js": "sha256-0Dpj/NkVD5WqSC16ZvJLmlc38iv9+Je+umYBVOycPVU="
     },
     "wasmNative": {
       "dotnet.native.wasm": "sha256-OcUTcd7qQceenWEF93409WZcaXp2qQbEyhdchog4RUE="
@@ -17,6 +21,8 @@
       "icudt_no_CJK.dat": "sha256-L7sV7NEYP37/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs="
     },
     "assembly": {
+      "AWSSDK.Core.wasm": "sha256-PwnGOuc2hRIzp8puTCB/PO+fHCbJPRhgpBkTAnRInPE=",
+      "AWSSDK.SecurityToken.wasm": "sha256-p5uU/t3HLy1rrFacRA9tMbXbNHhYwblFiePY513Ogv0=",
       "Microsoft.AspNetCore.Authorization.wasm": "sha256-H1yH7iBNYt/rilvQT6qsv2frcFFOBUKBnRrGQ1AIHnI=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-kPAmhH4D4UN/DyWkGyB1Sxs7tQyVDV150swtUfTSJJ8=",
       "Microsoft.AspNetCore.Components.Forms.wasm": "sha256-ZB9Iu49s5SYUpy+xnFe+KIg2LeHGglqjWkohvxQ8m30=",
@@ -208,10 +214,17 @@
       "mscorlib.wasm": "sha256-Gz8PyW2/fwihe5ul81OwmRUrU71r+KtbyRw6xlOGD+Q=",
       "netstandard.wasm": "sha256-jMTqIQzoDS810lyhZpMO5eEC36EzntXqSVn+2qwkOMQ=",
       "System.Private.CoreLib.wasm": "sha256-NFj5WE5VLP2LptZIRJCUIc1AMk06FmxpsSILfPISwAw=",
+<<<<<<< HEAD
       "BlazorFrontEnd.wasm": "sha256-6g4niXa82T4S68/z98kdGHQK2Rqinp/VB4s7sWhrfis="
     },
     "pdb": {
       "BlazorFrontEnd.pdb": "sha256-q9p/T0qGTV2sGBgwKlG1VTQY6FCd8F7UFRGbuYQ9oAA="
+=======
+      "BlazorFrontEnd.wasm": "sha256-RUA2vNP65G8PcYulvoXEmwPVfm3mS4KDuJUUOaDd9dE="
+    },
+    "pdb": {
+      "BlazorFrontEnd.pdb": "sha256-Or/H1Ndop1pyoRZhPsStyZaLtRgYsD2leQX0lJmiIkY="
+>>>>>>> 516cdfc27b4e4521995c9de944146e41196d6325
     }
   },
   "cacheBootResources": true,
