@@ -7,6 +7,15 @@
     color: white;
 }
 
+
+.highlighted-text {
+    color: black; /* Cambia el texto a color negro */
+    /*font-weight: bold;  Opcional: para resaltar */
+}
+
+
+
+
 main {
     flex: 1;
     display: flex;

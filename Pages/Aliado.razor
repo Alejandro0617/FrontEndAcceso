@@ -1,8 +1,4 @@
 @page "/aliado"
-<!--
-Define la URL relativa que carga este componente. En este caso, cuando un usuario navega a "/aliado",
-este componente Blazor se carga y se representa en la página.
--->
 @using BlazorFrontEnd.Services
 @inject ApiService ApiService
 @inject NavigationManager NavigationManager
@@ -20,14 +16,12 @@ este componente Blazor se carga y se representa en la página.
                         <a href="#addModal" class="btn btn-success" data-bs-toggle="modal" @onclick="() => PrepareForAddOrEdit()">
                             <i class="material-icons">&#xE147;</i> <span>Añadir Nuevo Aliado</span>
                         </a>
- 
                         <a href="#consultarModal" class="btn btn-success" data-bs-toggle="modal" @onclick="PrepareForConsulta">
                             <i class="material-icons">&#xE8B6;</i> <span>Consultar Aliado</span>
                         </a>
-                            <!-- Botón de cerrar sesión -->
-                             <button class="btn btn-danger" @onclick="Logout">
-                                <i class="material-icons">&#xE879;</i> <span>Cerrar Sesión</span>
-                            </button>
+                        <button class="btn btn-danger" @onclick="Logout">
+                            <i class="material-icons">&#xE879;</i> <span>Cerrar Sesión</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -37,35 +31,31 @@ este componente Blazor se carga y se representa en la página.
             }
             else if (!listado.Any())
             {
-                <p>No hay aliados registradas.</p>
+                <p>No hay aliados registrados.</p>
             }
             else
             {
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <!-- CAMBIAR EN CADA TABLA -->
-                            <th>Nit</th>
-                            <th>Razón Social</th>
-                            <th>Nombre Contacto</th>
-                            <th>Correo</th>
-                            <th>Teléfono</th>
-                            <th>Ciudad</th>
-                            <!-- FIN -->
+                            <th class="highlighted-text">Nit</th>
+                            <th class="highlighted-text">Razón Social</th>
+                            <th class="highlighted-text">Nombre Contacto</th>
+                            <th class="highlighted-text">Correo</th>
+                            <th class="highlighted-text">Teléfono</th>
+                            <th class="highlighted-text">Ciudad</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var sele in listado) // MODIFIED
+                        @foreach (var sele in listado)
                         {
                             <tr>
-                                <!-- CAMBIAR EN CADA TABLA -->
                                 <td>@sele["nit"]</td>
                                 <td>@sele["razon_social"]</td>
                                 <td>@sele["nombre_contacto"]</td>
                                 <td>@sele["correo"]</td>
                                 <td>@sele["telefono"]</td>
                                 <td>@sele["ciudad"]</td>
-                                <!-- FIN -->
                             </tr>
                         }
                     </tbody>
@@ -74,6 +64,7 @@ este componente Blazor se carga y se representa en la página.
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -84,63 +75,42 @@ este componente Blazor se carga y se representa en la página.
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- CAMBIAR EN CADA TABLA -->
                     <div class="form-group">
-                        <label>Nit</label>
+                        <label class="highlighted-text">Nit</label>
                         <InputNumber class="form-control" @bind-Value="nit" />
                         <ValidationMessage For="@(() => nit)" />
                     </div>
                     <div class="form-group">
-                        <label>Razón Social</label>
+                        <label class="highlighted-text">Razón Social</label>
                         <InputText class="form-control" @bind-Value="razon_social" />
                         <ValidationMessage For="@(() => razon_social)" />
                     </div>
                     <div class="form-group">
-                        <label>Nombre Contacto</label>
+                        <label class="highlighted-text">Nombre Contacto</label>
                         <InputText class="form-control" @bind-Value="nombre_contacto" />
                         <ValidationMessage For="@(() => nombre_contacto)" />
                     </div>
                     <div class="form-group">
-                        <label>Correo</label>
+                        <label class="highlighted-text">Correo</label>
                         <InputText class="form-control" @bind-Value="correo" />
                         <ValidationMessage For="@(() => correo)" />
                     </div>
                     <div class="form-group">
-                        <label>Teléfono</label>
+                        <label class="highlighted-text">Teléfono</label>
                         <InputText class="form-control" @bind-Value="telefono" />
                         <ValidationMessage For="@(() => telefono)" />
                     </div>
                     <div class="form-group">
-                        <label>Ciudad</label>
+                        <label class="highlighted-text">Ciudad</label>
                         <InputText class="form-control" @bind-Value="ciudad" />
                         <ValidationMessage For="@(() => ciudad)" />
                     </div>
-                    <!-- FIN -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">@(isNewSele ? "Añadir" : "Guardar")</button>
                 </div>
             </EditForm>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Eliminar Aliado</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>¿Está seguro de que desea eliminar esta aliado?</p>
-                <p class="text-warning"><small>Esta acción no se puede deshacer.</small></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" @onclick="DeleteSele">Eliminar</button>
-            </div>
         </div>
     </div>
 </div>
@@ -153,32 +123,30 @@ este componente Blazor se carga y se representa en la página.
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- CAMBIAR EN CADA TABLA -->
                 <div class="form-group">
-                    <label>Nit</label>
+                    <label class="highlighted-text">Nit</label>
                     <input type="text" class="form-control" @bind="consulta1" @bind:event="oninput" />
                 </div>
                 <div class="form-group">
-                    <label>Razón Social</label>
+                    <label class="highlighted-text">Razón Social</label>
                     <input type="text" class="form-control" @bind="consulta2" readonly />
                 </div>
                 <div class="form-group">
-                    <label>Nombre Contacto</label>
+                    <label class="highlighted-text">Nombre Contacto</label>
                     <input type="text" class="form-control" @bind="consulta3" readonly />
                 </div>
                 <div class="form-group">
-                    <label>Correo</label>
+                    <label class="highlighted-text">Correo</label>
                     <input type="text" class="form-control" @bind="consulta4" readonly />
                 </div>
                 <div class="form-group">
-                    <label>Teléfono</label>
+                    <label class="highlighted-text">Teléfono</label>
                     <input type="text" class="form-control" @bind="consulta5" readonly />
                 </div>
                 <div class="form-group">
-                    <label>Ciudad</label>
+                    <label class="highlighted-text">Ciudad</label>
                     <input type="text" class="form-control" @bind="consulta6" readonly />
                 </div>
-                <!-- FIN -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -189,6 +157,7 @@ este componente Blazor se carga y se representa en la página.
         </div>
     </div>
 </div>
+
 
 @code {
    
