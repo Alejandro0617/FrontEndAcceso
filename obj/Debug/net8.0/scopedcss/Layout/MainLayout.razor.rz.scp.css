@@ -48,7 +48,36 @@ main[b-msf2p0x9on] {
         margin-left: 0;
         font-size: 0.9rem;
     }
-}
 
+}
+@media (min-width: 641px) {
+    .page[b-msf2p0x9on] {
+        flex-direction: row;
+    }
+
+    .sidebar[b-msf2p0x9on] {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .top-row[b-msf2p0x9on] {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .top-row.auth[b-msf2p0x9on]  a:first-child {
+        flex: 1;
+        text-align: right;
+        width: 0;
+    }
+
+    .top-row[b-msf2p0x9on], article[b-msf2p0x9on] {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+}
 
 
