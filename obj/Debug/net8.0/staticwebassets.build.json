@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "VYiZeFtgtBAtpMPIrfdvA8pRRqtvJyI6kGWTv3eC6dc=",
+  "Hash": "TnvwPRsO5Y5UngL4aOLHOILCdqyZW7DjGfsWRtgcvMQ=",
   "Source": "BlazorFrontEnd",
   "BasePath": "/",
   "Mode": "Root",
@@ -8033,6 +8033,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\sample-data\\weather.json"
+    },
+    {
+      "Identity": "C:\\Users\\jose_\\OneDrive\\Documentos\\Proyectos VS Code\\GITHUB\\FrontEndAcceso\\wwwroot\\site.js",
+      "SourceId": "BlazorFrontEnd",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\jose_\\OneDrive\\Documentos\\Proyectos VS Code\\GITHUB\\FrontEndAcceso\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "site.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\site.js"
     }
   ]
 }

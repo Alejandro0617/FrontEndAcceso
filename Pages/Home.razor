@@ -2,46 +2,50 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 
-<div class="container mt-4">
-    <strong><h3>Base de datos - Gestion Profesoral:</h3></strong>
-    @if (string.IsNullOrEmpty(usuarioEmail))
-    {
-        <div>
-            <p>¡Bienvenido! Para acceder al contenido de las tablas primero debes iniciar sesión.</p>
-            <button class="btn btn-primary" @onclick="RedirectToLogin">Iniciar Sesión</button>
-        </div>
-    }
-    else
-    {
-        <h3>Información del Usuario</h3>
-        <div class="mb-3">
-            <strong>Email:</strong> @usuarioEmail
-        </div>
+<section style="min-height: 100vh; background-color: black; color: white; display: flex; align-items: center; justify-content: center;">
+    <div class="container">
+        <h2 class="text-center mb-4" style="color: #fff;">Base de Datos - Gestión Profesoral</h2>
 
-        <h4>Roles:</h4>
-        <ul class="list-unstyled">
-            @foreach (var rol in roles)
-            {
-                <li>@rol</li>
-            }
-        </ul>
+        @if (string.IsNullOrEmpty(usuarioEmail))
+        {
+            <div class="text-center">
+                <p style="font-size: 1.2rem;">¡Bienvenido! Para acceder al contenido de las tablas, primero debes iniciar sesión.</p>
+                <button class="btn btn-primary" 
+                        style="background-color: #6610f2; border: none; border-radius: 0.5rem; padding: 0.75rem 1.5rem;" 
+                        @onclick="RedirectToLogin">Iniciar Sesión</button>
+            </div>
+        }
+        else
+        {
+            <div style="background-color: #1e1e1e; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);">
+                <h4 style="color: #6610f2;">Información del Usuario</h4>
+                <p><strong>Email:</strong> @usuarioEmail</p>
 
-        <h4>Rutas a las que tiene acceso:</h4>
-        <ul class="list-unstyled">
-            @foreach (var ruta in rutas)
-            {
-                <li>@ruta</li>
-            }
-        </ul>
+                <h5 style="color: #6610f2;">Roles:</h5>
+                <ul style="list-style-type: none; padding: 0;">
+                    @foreach (var rol in roles)
+                    {
+                        <li style="padding: 5px 10px; background-color: #292929; margin-bottom: 5px; border-radius: 4px;">
+                            @rol
+                        </li>
+                    }
+                </ul>
 
-        <!-- Botón de Cerrar Sesión -->
-        <div class="mt-4">
-            <button class="btn btn-danger" @onclick="Logout">
-                <i class="material-icons">&#xE879;</i> <span>Cerrar Sesión</span>
-            </button>
-        </div>
-    }
-</div>
+                <h5 style="color: #6610f2;">Rutas a las que tiene acceso:</h5>
+                <div style="margin-bottom: 20px;">
+                    @foreach (var ruta in rutas)
+                    {
+                        <button class="btn btn-outline-light" 
+                                style="margin: 5px; padding: 0.5rem 1rem; border: 1px solid #6610f2; border-radius: 4px;" 
+                                @onclick="@(() => NavegarARuta(ruta))">@ruta</button>
+                    }
+                </div>
+
+                <button class="btn btn-danger" style="padding: 0.5rem 1.5rem;" @onclick="Logout">Cerrar Sesión</button>
+            </div>
+        }
+    </div>
+</section>
 
 @code {
     private string usuarioEmail = "";
@@ -87,6 +91,12 @@
             // También mostrar el error en la consola del navegador
             await JSRuntime.InvokeVoidAsync("console.error", "Error:", ex);
         }
+    }
+
+    private void NavegarARuta(string ruta)
+    {
+        // Redirige a la ruta específica
+        NavigationManager.NavigateTo(ruta);
     }
 
     private void RedirectToLogin()
