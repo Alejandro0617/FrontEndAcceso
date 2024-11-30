@@ -4,15 +4,7 @@
     flex-direction: column;
     min-height: 100vh;
     background-color: black;
-    color: white;
 }
-
-
-.highlighted-text[b-msf2p0x9on] {
-    color: black; /* Cambia el texto a color negro */
-    /*font-weight: bold;  Opcional: para resaltar */
-}
-
 
 
 
@@ -36,7 +28,7 @@ main[b-msf2p0x9on] {
 }
 
     .top-row a[b-msf2p0x9on], .top-row .btn-link[b-msf2p0x9on] {
-        /*color: #fff;*/
+        color: #fff;
         white-space: nowrap;
         margin-left: 1.5rem;
         text-decoration: none;

@@ -385,6 +385,7 @@
         });
         <!-- FIN -->
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("removeModalBackdrops");
         await JSRuntime.InvokeVoidAsync("showModal", "addModal");
     }
 
@@ -399,6 +400,7 @@
                 ["fecha_fin"] = consultaFF
         });
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("removeModalBackdrops");
         await JSRuntime.InvokeVoidAsync("showModal", "deleteModal");
     }
 

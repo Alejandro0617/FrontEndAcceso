@@ -24,7 +24,7 @@
           <div class="form-outline mb-4">
             <InputText id="username" class="form-control form-control-lg" 
                        @bind-Value="modeloLogin.Correo" placeholder="Usuario" 
-                       style="border-radius: 0.5rem; font-size: 1.2rem; padding: 0.75rem;" />
+                       style="border-radius: 0.5rem; font-size: 1.2rem; padding: 0.75rem; width: auto;" />
             <ValidationMessage For="@(() => modeloLogin.Correo)" />
           </div>
 
@@ -32,7 +32,7 @@
           <div class="form-outline mb-4">
             <InputText id="password" type="password" class="form-control form-control-lg" 
                        @bind-Value="modeloLogin.Contrasena" placeholder="Contraseña" 
-                       style="border-radius: 0.5rem; font-size: 1.2rem; padding: 0.75rem;" />
+                       style="border-radius: 0.5rem; font-size: 1.2rem; padding: 0.75rem; width: auto;" />
             <ValidationMessage For="@(() => modeloLogin.Contrasena)" />
           </div>
 

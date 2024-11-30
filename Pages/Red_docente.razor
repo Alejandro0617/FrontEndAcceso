@@ -389,6 +389,7 @@ este componente Blazor se carga y se representa en la página.
         });
         <!-- FIN -->
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("removeModalBackdrops");
         await JSRuntime.InvokeVoidAsync("showModal", "addModal");
     }
 
@@ -403,6 +404,7 @@ este componente Blazor se carga y se representa en la página.
             ["act_destacadas"] = consulta5
         });
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("removeModalBackdrops");
         await JSRuntime.InvokeVoidAsync("showModal", "deleteModal");
     }
 

@@ -64,6 +64,7 @@
         </div>
     </div>
 </div>
+<br>
 <div class="container-xl">
     <div class="table-responsive">
         <div class="table-wrapper">
@@ -451,6 +452,7 @@
         });
         <!-- FIN -->
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("removeModalBackdrops");
         await JSRuntime.InvokeVoidAsync("showModal", "addModal");
     }
     // END MODIFIED
@@ -467,6 +469,7 @@
             ["fkidrol"] = consulta3
         });
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("removeModalBackdrops");
         await JSRuntime.InvokeVoidAsync("showModal", "deleteModal");
     }
     // END MODIFIED

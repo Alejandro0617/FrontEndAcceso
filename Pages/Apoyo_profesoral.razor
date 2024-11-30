@@ -366,6 +366,7 @@
         });
         <!-- FIN -->
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("removeModalBackdrops");
         await JSRuntime.InvokeVoidAsync("showModal", "addModal");
     }
 
@@ -379,6 +380,7 @@
                 ["tipo"] = consultaTipo
         });
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("removeModalBackdrops");
         await JSRuntime.InvokeVoidAsync("showModal", "deleteModal");
     }
 

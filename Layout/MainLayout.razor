@@ -1,18 +1,9 @@
 ﻿@inherits LayoutComponentBase
-
-<section class="vh-100" style="background-color: black; color: white;">
-    <div class="container-fluid h-100 d-flex flex-column justify-content-center align-items-center">
-        <!-- Encabezado superior -->
-        <div class="w-100 text-end px-4 mb-3">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank" class="btn btn-link text-light">About</a>
-        </div>
-
-        <!-- Contenido principal -->
-        <div class="content w-100 d-flex justify-content-center align-items-center">
+<div class="page">
+    <main>
+        <article class="content px-4">
             @Body
-        </div>
-    </div>
-</section>
-
-
-
+            <script src="site.js"></script>
+        </article>
+    </main>
+</div>
