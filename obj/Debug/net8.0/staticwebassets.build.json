@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "EPdf9ZkFT9CZDpFlLefDlO/5t+1KUBhW1cM3A2lSAL8=",
+  "Hash": "UVa6iKe351/nqTZOeMR7/7wq0AasiB1iYJMKRymPziM=",
   "Source": "BlazorFrontEnd",
   "BasePath": "/",
   "Mode": "Root",
@@ -8033,6 +8033,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\sample-data\\weather.json"
+    },
+    {
+      "Identity": "C:\\Users\\Acer\\Downloads\\BlazorFrontEnd-ControlAcceso\\BlazorFrontEnd\\wwwroot\\site.js",
+      "SourceId": "BlazorFrontEnd",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Acer\\Downloads\\BlazorFrontEnd-ControlAcceso\\BlazorFrontEnd\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "site.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\site.js"
     }
   ]
 }

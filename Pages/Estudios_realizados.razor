@@ -768,6 +768,7 @@
         });
         <!-- FIN -->
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("removeModalBackdrops");
         await JSRuntime.InvokeVoidAsync("showModal", "addModal");
     }
     private async Task ModificarSeleConsultada2()
@@ -778,6 +779,7 @@
             ["area_conocimiento"] = consulta13
         });
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal2");
+        await JSRuntime.InvokeVoidAsync("removeModalBackdrops");
         await JSRuntime.InvokeVoidAsync("showModal", "addModal2");
     }
 
@@ -798,6 +800,7 @@
             ["pais"] = consulta11
         });
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal");
+        await JSRuntime.InvokeVoidAsync("removeModalBackdrops");
         await JSRuntime.InvokeVoidAsync("showModal", "deleteModal");
     }
     private async Task EliminarSeleConsultada2()
@@ -808,6 +811,7 @@
             ["area_conocimiento"] = consulta13
         });
         await JSRuntime.InvokeVoidAsync("hideModal", "consultarModal2");
+        await JSRuntime.InvokeVoidAsync("removeModalBackdrops");
         await JSRuntime.InvokeVoidAsync("showModal", "deleteModal2");
     }
     

@@ -16,7 +16,7 @@ body {
 }
 .table-title {
     padding-bottom: 15px;
-    background: #2E2B64;
+    background: #590a0a;
     color: #fff;
     padding: 16px 30px;
     min-width: 100%;
@@ -132,4 +132,8 @@ table.table td i {
     float: left;
     margin-top: 10px;
     font-size: 13px;
+}
+
+.modal-content{
+    background-color: #bd7878 !important;
 }
